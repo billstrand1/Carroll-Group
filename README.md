@@ -1,2 +1,2 @@
 # Carroll-Group
-Sign-Up
+Monday / Wednesday / Friday Sign-Ups
