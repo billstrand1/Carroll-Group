@@ -125,7 +125,7 @@ def get_index_from_prefilled_dict():  #pre-defined for testing only
 
 
 
-#--------------------START CODE EXECUTION-----------------------------
+#--------------------START LIST, DICT DEFINITINS-----------------------------
 index_list = []
 player_dict = {}
 
@@ -139,6 +139,7 @@ ghin = ['3660603','4548474','4787165','2379581','3661053','3660992','3660486','5
 '1815996','3660253','3660366', '3660265', '3660283', '7701708', '3661029', '0053161']
 # ghin = ['add Franks', 'add Bobs'] # for Testing New people and obtain their 'formal names' from GHIN to add to name_dict.  Missing Frank, Bob V.
 
+#--------------------START CODE EXECUTION-----------------------------
 
 print('Program starts')
 # get_index_from_ghin() #for production, player_dict is populated with a new ghin download
