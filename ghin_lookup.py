@@ -126,7 +126,7 @@ def get_index_from_prefilled_dict():  #pre-defined for testing only
 
 #--------------------START LIST, DICT DEFINITINS-----------------------------
 index_list = []
-player_dict = {}
+player_dict = {} # list of players : h_i from either prefilled or ghin
 
 name_dict = {'Mr. Jack Carroll': 'Jack', 'Bob Heard': 'Bob', 'Larry Traub': 'Larry', 'Jim Sido': 'Jim S.', 
 'Curt Fitzgerald': 'Curt', 'Jimmy Wickham': 'Jimmy', 'Dr. Richard Humphrey': 'Hump', 'Kent Fannon': 'Kent', 
