@@ -77,8 +77,8 @@ ghin = ['3660603','4548474','4787165','2379581','3661053','3660992','3660486','5
 #--------------------START CODE EXECUTION-----------------------------
 
 print('Program starts')
-get_index_from_ghin() #for production, player_dict is populated with a new ghin download
-# player_dict = get_index_from_prefilled_dict() #for testing only, player_dict is predefined from a previous ghin download
+# get_index_from_ghin() #for production, player_dict is populated with a new ghin download
+player_dict = get_index_from_prefilled_dict() #for testing only, player_dict is predefined from a previous ghin download
 
 tpc_list = []  #accumulate list of handicaps for sorting purposes
 cwv_list = []  #accumulate list of handicaps for sorting purposes
@@ -88,9 +88,9 @@ for player in player_dict:
 	h_i = float(player_dict[player])
 	name = player
 	# print (h_i)
-	handicap_tpc = round (h_i * tpc_slope_white / 113)
+	handicap_tpc = round (h_i * tpc_slope_white / 113) # Need to add in Par - Rating
 	tpc_list.append(handicap_tpc)
-	handicap_cwv = round (h_i * cwv_slope_white / 113)
+	handicap_cwv = round (h_i * cwv_slope_white / 113) # Need to add in Par - Rating
 	cwv_list.append(handicap_cwv)
 	# print(f"Name: {name} Index: {h_i}, TPC: {handicap_tpc}, CWV: {handicap_cwv}")
 
