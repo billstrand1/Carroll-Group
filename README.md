@@ -3,6 +3,7 @@ Monday / Wednesday / Friday Sign-Ups
 
 https://billstrand1.github.io/Carroll-Group/
 
+cd documents/github/Carroll-Group
 
 Previous Results
 # Bob : 6.2, TPC: 7 (0), CWV: 7 (0)
