@@ -55,10 +55,26 @@ def get_index_from_ghin():
 	# print(player_dict)
 
 def get_index_from_prefilled_dict():  #pre-defined for testing only
-	return ({'Bob Heard': '6.2', 'Larry Traub': '8.4', 'Jim Sido': '8.2', 
-	'Curt Fitzgerald': '17.5', 'Jimmy Wickham': '13.9', 'Dr. Richard Humphrey': '16.9', 'Kent Fannon': '12.5', 
-	'Bill Barnard': '15.6', 'Mr. Doug Williams': '19.1', 'Rocky Duron': '16.1', 'Will Davis': '12.7', 
-	'Reid Baker': '11.2', 'Mr. Jack Carroll': '10.1', 'Al Vela': '14.5', 'Dan Stewart': '13.0', 'Bill Strand': '11.3',})
+	return ({'Al Vela': '15.7',
+		'Rick Besse': '15.7',
+		'Bill Barnard': '16.0',
+		'Bill Strand': '11.3',
+		'Bob Heard': '6.2',
+
+		'Curt Fitzgerald': '17.0',
+		'Dan Stewart': '13.1',
+		'Doug Williams': '18.9',
+		'Frank Broyles': '14.8',
+		'Richard Humphrey': '16.6',
+		'Jack Carroll': '10.1',
+		'Jim Sido': '8.8',
+		'Jimmy Wickham': '14.0',
+		'Kent Fannon': '12.9',
+		'Larry Traub': '8.3',
+		'Reid Baker': '11.3',
+		'Rocky Duron': '16.2', 
+		'Rick Baumgarth': '9.2',
+	    'Will Davis': '12.3' })
 
 
 # Under the new WHS, however, course handicaps reflect the strokes you get in relation to par with a subtle but significant change to the formula.
@@ -86,11 +102,11 @@ tpc_rating_gold = 70.2
 cwv_rating_gold = 70.3
 
 
-name_dict = {'Mr. Jack Carroll': 'Jack', 'Bob Heard': 'Bob', 'Larry Traub': 'Larry', 'Jim Sido': 'Jim S.', 
-'Curt Fitzgerald': 'Curt', 'Jimmy Wickham': 'Jimmy', 'Dr. Richard Humphrey': 'Hump', 'Kent Fannon': 'Kent', 
-'Bill Barnard': 'Bill B.', 'Mr. Doug Williams': 'Doug', 'Rocky Duron': 'Rocky', 'Will Davis': 'Will', 
+name_dict = {'Jack Carroll': 'Jack', 'Bob Heard': 'Bob H.', 'Larry Traub': 'Larry', 'Jim Sido': 'Jim S.', 
+'Curt Fitzgerald': 'Curt', 'Jimmy Wickham': 'Jimmy', 'Richard Humphrey': 'Hump', 'Kent Fannon': 'Kent', 
+'Bill Barnard': 'Bill B.', 'Doug Williams': 'Doug', 'Rocky Duron': 'Rocky', 'Will Davis': 'Will', 
 'Reid Baker': 'Reid', 'Bill Strand': 'Bill S.', 'Rick Baumgarth': 'Trick', 'Rick Besse': 'Besse', 'Dan Stewart': 'Dan', 
-'Al Vela': 'Al'} #missing Frank, Bob V.
+'Al Vela': 'Al', 'Frank Broyles': 'Frank'} #missing Bob V.
 
 # ghin = ['3660603','4548474','4787165','2379581','3661053','3660992','3660486','5910694','3661061','3720105',
 # '1815996','3660253','3660366', '3660265', '3660283', '7701708', '3661029', '0053161']
@@ -150,7 +166,7 @@ cwv_min = cwv_list[0]
 
 #for printing purposes only, redundant from above
 
-results_list = [["   ", "   ",  "TPC", "TPC", "CWV", "CWV"], ["Name", "Index","HCP", "Strokes", "HCP", "Strokes"], ["-------","-----",  "---",  "-------",  "---",  "-------"]]
+results_list = [["   ", "   ",  "TPC", "TPC", "CWV", "CWV"], ["Name", "Index","HCP", "Strokes", "HCP", "Strokes"]]#, ["-------","-----",  "---",  "-------",  "---",  "-------"]]
 for player in player_dict:
 	tpc_handicap = compute_handicap_tpc_white(float(player_dict[player]))
 	cwv_handicap = compute_handicap_cwv_white(float(player_dict[player]))
@@ -161,10 +177,10 @@ for player in player_dict:
 today = datetime.now()
 today = today.strftime("%B %d, %Y %H:%M")
 
-print('-------------------------------------------------------')
+# print('-------------------------------------------------------')
 print("Today's date:", today)
 
-print (tabulate(results_list)) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
+print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
 print (f"TPC: {tpc_rating_white} / {tpc_slope_white}  CWV: {cwv_rating_white} / {cwv_slope_white} ")
 print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 print ('  (Course Rating - Par)')
