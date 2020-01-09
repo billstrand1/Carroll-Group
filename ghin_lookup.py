@@ -132,9 +132,9 @@ for player in player_dict:
 
 #determine lowest handicap
 tpc_list.sort()
-tpc_min = tpc_list[0]
+tpc_min = tpc_list[0] #lowest TPC handicap
 cwv_list.sort()
-cwv_min = cwv_list[0]
+cwv_min = cwv_list[0] #lowest CWV handicap
 
 #for printing purposes only, redundant from above
 
