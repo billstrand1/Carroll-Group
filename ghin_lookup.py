@@ -1,61 +1,35 @@
 #ghin_lookup.py
 #uploaded to Git, test comment update.
+# CALCS ARE FOR TPC WHITE PAR 72...
 
-# changing under Use HTML in Text File branch.
-
-# import calculate_handicaps
 from tabulate import tabulate
-import requests
-from bs4 import BeautifulSoup
 import re
-import pprint
-# import time	#not used
-# from collections import namedtuple #not used
-from datetime import date
 from datetime import datetime
 
+#------------------------file start-------------------------------
+def get_index_from_text_file():
+	print('enter get_index_from_text_file')
+	player_dict = {}
+	pg = open(file_name)
+	page = str(pg.read())
 
-def get_index(ghin_no):
-	url = 'https://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&dynamic=&small=1&css=CGA03&ghinno=' + ghin_no + '&hidename=0&showmsg=0&showheader=1&showtabheader=0&combinehieff=0&showheadertext=1&showfootertext=1&tab=0'
-	page = requests.get(url)
-	# print(page) #looking for 200
+	name = re.findall('name">(.*?)<', str(page)) 
 
-	# parse the html using beautiful soup and store in variable `soup`
-	soup = BeautifulSoup(page.text, 'html.parser')
-	# extract line with index 
-	index_text = soup.find_all(class_='ClubGridHandicapIndex')
-	# find handicap index from string
-	index = re.findall('[0-9]+.[0-9]', str(index_text))
-	index_int = index[0] #print(index[0])
-	# print(index_int)
+	# find handicap index from string, will only pull out leading '>'
+	index = re.findall('>[0-9]+.[0-9]', str(page)) #index_text
 
-	# extract line with name
-	name_text = soup.find(id='ctl00_bodyMP_lblName')
-	# print(name_text)
+	index_2 = []	# remove leading '>'
+	for item in index:
+		item = item[1:] #slice from position 1 on...
+		index_2.append(item)
 
-	name = re.findall('>(.*?)<', str(name_text))
-	name_str = name[0]  #print(name[0])
-	# print(name_str)
-
-	# works:
-	index_list.append(index_int)
-	# print (index_list)
-	player_dict[name_str] = index_int
-
-def get_index_from_ghin():
-	print('get_index_from_ghin entered')
-
-	# for item in ghin: #index_list:
-	for ghin_no in ghin:
-		get_index(ghin_no)
-		# print(ghin_no)
-		time.sleep(3)
-
-	# print('Index List:')
-	# print(index_list)
-	# print('Player Dict:')
-	# print(player_dict)
-
+	zipObj = zip(name, index_2) #create a dict from 2 lists
+	player_dict = dict(zipObj)
+	bill_index = input ("Bill's Index? ")
+	player_dict['Bill Strand'] = bill_index
+	# print (f'player_dict: \n {player_dict}')
+	return (player_dict)
+#------------------------file end-------------------------------
 def get_index_from_prefilled_dict():  #pre-defined for testing only
 	return ({'Al Vela': '15.7',
 		'Rick Besse': '15.7',
@@ -78,25 +52,26 @@ def get_index_from_prefilled_dict():  #pre-defined for testing only
 		'Rick Baumgarth': '9.2',
 	    'Will Davis': '12.3' })
 
-
 # Under the new WHS, however, course handicaps reflect the strokes you get in relation to par with a subtle but significant change to the formula.
 # Course Handicap = Handicap Index x (Slope Rating/113) + (Course Rating - par)
 
-
-def compute_handicap_tpc_white(h_i):
-	return (round ((h_i * tpc_slope_white / 113) + (tpc_rating_white - 70))) # Need to add in Par - Rating
-
+def compute_handicap_tpc_white(h_i): #for PAR 72 ONLY
+	return (round ((h_i * tpc_slope_white_72 / 113) + (tpc_rating_white_72 - tpc_hcp_72))) # Need to add in Par - Rating
 
 def compute_handicap_cwv_white(h_i):
 	return (round ((h_i * cwv_slope_white / 113) + (cwv_rating_white - 71))) # Need to add in Par - Rating
 
 #--------------------START LIST, DICT DEFINITINS-----------------------------
-index_list = []
-player_dict = {} # list of players : h_i from either prefilled or ghin
-tpc_slope_white = 128
+tpc_slope_white_70 = 128
+tpc_rating_white_70 = 69.4
+tpc_hcp_70 = 70
+
 cwv_slope_white = 130
-tpc_rating_white = 69.4
 cwv_rating_white = 69.3
+
+tpc_slope_white_72 = 127
+tpc_rating_white_72 = 70
+tpc_hcp_72 = 72
 
 tpc_slope_gold = 132
 cwv_slope_gold = 132
@@ -109,11 +84,6 @@ name_dict = {'Jack Carroll': 'Jack', 'Bob Heard': 'Bob H.', 'Larry Traub': 'Larr
 'Bill Barnard': 'Bill B.', 'Doug Williams': 'Doug', 'Rocky Duron': 'Rocky', 'Will Davis': 'Will', 
 'Reid Baker': 'Reid', 'Bill Strand': 'Bill S.', 'Rick Baumgarth': 'Trick', 'Rick Besse': 'Besse', 'Dan Stewart': 'Dan', 
 'Al Vela': 'Al', 'Frank Broyles': 'Frank'} #missing Bob V.
-
-# ghin = ['3660603','4548474','4787165','2379581','3661053','3660992','3660486','5910694','3661061','3720105',
-# '1815996','3660253','3660366', '3660265', '3660283', '7701708', '3661029', '0053161']
-# ghin = ['add Franks', 'add Bobs'] # for Testing New people and obtain their 'formal names' from GHIN to add to name_dict.  Missing Frank, Bob V.
-
 
 # Create new GHIN list alphabetically:
 
@@ -140,10 +110,10 @@ ghin = ['3660253', #	Reid
 #--------------------START CODE EXECUTION-----------------------------
 
 # print('Program starts')
-# get_index_from_ghin() #for production, player_dict is populated with a new ghin download
-player_dict = get_index_from_prefilled_dict() #for testing only, player_dict is predefined from a previous ghin download
+file_name = input ("What is the input filename? > ")
+# print('calling get_index_from_text_file')
+player_dict = get_index_from_text_file() #take copy/pasted html and save to file named: 2020-01-05.txt
 
-# print(player_dict)
 
 tpc_list = []  #accumulate list of handicaps for sorting purposes
 cwv_list = []  #accumulate list of handicaps for sorting purposes
@@ -152,7 +122,7 @@ cwv_list = []  #accumulate list of handicaps for sorting purposes
 for player in player_dict:
 	h_i = float(player_dict[player])
 	name = player
-	# print (h_i)
+
 	handicap_tpc = compute_handicap_tpc_white(h_i)
 	tpc_list.append(handicap_tpc)
 	handicap_cwv = compute_handicap_cwv_white(h_i)
@@ -168,7 +138,8 @@ cwv_min = cwv_list[0]
 
 #for printing purposes only, redundant from above
 
-results_list = [["   ", "   ",  "TPC", "TPC", "CWV", "CWV"], ["Name", "Index","HCP", "Strokes", "HCP", "Strokes"]]#, ["-------","-----",  "---",  "-------",  "---",  "-------"]]
+# results_list = [["   ", "   ",  "TPC", "TPC", "CWV", "CWV"], ["Name", "Index","HCP", "Strokes", "HCP", "Strokes"]]#, ["-------","-----",  "---",  "-------",  "---",  "-------"]]
+results_list = []
 for player in player_dict:
 	tpc_handicap = compute_handicap_tpc_white(float(player_dict[player]))
 	cwv_handicap = compute_handicap_cwv_white(float(player_dict[player]))
@@ -176,14 +147,17 @@ for player in player_dict:
 	results = [name_dict[player], player_dict[player], tpc_handicap, tpc_handicap-tpc_min, cwv_handicap, cwv_handicap-cwv_min]
 	results_list.append(results)
 
+results_list.sort()
+results_list.insert(0,["   ", "   ",  "TPC", "TPC", "CWV", "CWV"])
+results_list.insert(1,["Name", "Index","(72)", "Strks", "(71)", "Strks"])
 today = datetime.now()
 today = today.strftime("%B %d, %Y %H:%M")
 
 # print('-------------------------------------------------------')
-print("Today's date:", today)
+print("\n \n Today's date:", today)
 
 print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-print (f"TPC: {tpc_rating_white} / {tpc_slope_white}  CWV: {cwv_rating_white} / {cwv_slope_white} ")
+print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white} / {cwv_slope_white} / Par 71")
 print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 print ('  (Course Rating - Par)')
 print('--------------------------------------------------------')
