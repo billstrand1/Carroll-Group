@@ -1,6 +1,6 @@
 #ghin_lookup.py
 #uploaded to Git, test comment update.
-# CALCS ARE FOR TPC WHITE PAR 72...
+
 
 from tabulate import tabulate
 import re
@@ -75,22 +75,6 @@ name_dict = {'Jack Carroll': 'Jack',
 
 
 
-#--------------------START CODE EXECUTION-----------------------------
-# def print_results(choice):
-
-# 	today = datetime.now()
-# 	today = today.strftime("%B %d, %Y %H:%M")
-
-# 	if choice == 'B' or choice == 'b':
-# 		# print('-------------------------------------------------------')
-# 		print("\n \n Today's date:", today)
-
-# 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-# 		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
-# 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
-# 		print ('  (Course Rating - Par)')
-# 		print('--------------------------------------------------------')
-
 #--------------------START CODE EXECUTION - TRY BEAUTIFUL SOUP-----------------------------
 #------------------------file start-------------------------------
 def get_index_from_text_file(file_name):
@@ -130,9 +114,7 @@ def main():
 	print('BEAUTIFUL SOUP process')
 	print('-------------------------------------------------------')
 	file_name = input ("What is the input filename? > ")
-	# print('calling get_index_from_text_file')
-	# player_dict = get_index_from_text_file2(file_name) #take copy/pasted html and save to file named: 2020-01-05.txt
-	player_dict = get_index_from_text_file(file_name) #player_dict = 
+	player_dict = get_index_from_text_file(file_name)
 
 	tpc_list = []  #accumulate list of handicaps for sorting purposes
 	cwv_list = []  #accumulate list of handicaps for sorting purposes
@@ -156,26 +138,10 @@ def main():
 	cwv_min = cwv_list[0] #lowest CWV handicap
 
 
-	#for printing purposes only, REDUNDANT from above
-	# results_list = [["   ", "   ",  "TPC", "TPC", "CWV", "CWV"], ["Name", "Index","HCP", "Strokes", "HCP", "Strokes"]]#, ["-------","-----",  "---",  "-------",  "---",  "-------"]]
-	# results_list = []
-	# for player in player_dict:
-	# 	tpc_handicap = compute_handicap_tpc(float(player_dict[player]), tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72)
-	# 	cwv_handicap = compute_handicap_cwv(float(player_dict[player]), cwv_slope_white_71, cwv_rating_white_71, cwv_hcp_71)
-	# 	# print(f" {name_dict[player]} : {player_dict[player]}, TPC: {tpc_handicap} ({tpc_handicap-tpc_min}), CWV: {cwv_handicap} ({cwv_handicap-cwv_min})")
-	# 	results = [name_dict[player], player_dict[player], tpc_handicap, tpc_handicap-tpc_min, cwv_handicap, cwv_handicap-cwv_min]
-	# 	results_list.append(results)
-
-	# results_list.sort()
-	# results_list.insert(0,["   ", "   ",  "TPC", "TPC", "CWV", "CWV"])
-	# results_list.insert(1,["Name", "Index","(72)", "Strks", "(71)", "Strks"])
-	# today = datetime.now()
-	# today = today.strftime("%B %d, %Y %H:%M")
-
-
 	choice = input ("[T]PC, [C]WV, or [B]oth? > ")
 
 	if choice == 'B' or choice == 'b':
+		#for printing purposes only, REDUNDANT from above
 		results_list = []
 		for player in player_dict:
 			tpc_handicap = compute_handicap_tpc(float(player_dict[player]), tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72)
@@ -194,10 +160,12 @@ def main():
 		print("\n \n Today's date:", today)
 		print(f" File name: {file_name}")
 
+
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
 		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
+		print(f"File name: {file_name}")
 		print('--------------------------------------------------------')
 
 	elif choice == 'T' or choice == 't':
@@ -218,12 +186,13 @@ def main():
 
 		print('-------------------------------------------------------')
 		print("\n \n Today's date:", today)
-		print(f" File name: {file_name}")
+
 
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
 		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
+		print(f"File name: {file_name}")
 		print('--------------------------------------------------------')
 
 
@@ -244,12 +213,12 @@ def main():
 
 		print('-------------------------------------------------------')
 		print("\n \n Today's date:", today)
-		print(f" File name: {file_name}")
 
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
 		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
+		print(f"File name: {file_name}")
 		print('--------------------------------------------------------')
 
 
