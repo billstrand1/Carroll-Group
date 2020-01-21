@@ -5,9 +5,11 @@
 from tabulate import tabulate
 import re
 from datetime import datetime
+from bs4 import BeautifulSoup
+import pprint
 
 #------------------------file start-------------------------------
-def get_index_from_text_file(file_name):
+def get_index_from_text_file_OLD(file_name):
 	print('enter get_index_from_text_file')
 	player_dict = {}
 	pg = open(file_name)
@@ -138,11 +140,11 @@ ghin = ['3660253', #	Reid
 	'3661061'] #	Doug
 
 #--------------------START CODE EXECUTION-----------------------------
-def main():
+def main_OLD():
 	# print('Program starts')
 	file_name = input ("What is the input filename? > ")
 	# print('calling get_index_from_text_file')
-	player_dict = get_index_from_text_file(file_name) #take copy/pasted html and save to file named: 2020-01-05.txt
+	player_dict = get_index_from_text_file_OLD(file_name) #take copy/pasted html and save to file named: 2020-01-05.txt
 
 
 	tpc_list = []  #accumulate list of handicaps for sorting purposes
@@ -192,11 +194,138 @@ def main():
 	print ('  (Course Rating - Par)')
 	print('--------------------------------------------------------')
 
-def FrankHandicaps(f_h_i):
-	# f_h_i = input ("Frank's Handicap Index: ")
+#--------------------START CODE EXECUTION - TRY BEAUTIFUL SOUP-----------------------------
+#------------------------file start-------------------------------
+def get_index_from_text_file2(file_name):
+	# print('enter get_index_from_text_file')
+	player_dict = {}
+	pg = open(file_name)
+	soup = BeautifulSoup(pg, 'lxml')
+	# print(soup)
+	index = 0
+	# no good: players = soup.find('div', class_='panel')
+
+#-----TRY MULTI PLAYER WITH FINDALL--
+	players = soup.find_all('span', class_='item')
+	# print(type(players))
+
+	for item in players: #soup.find_all('span', class_='item'):
+		# print (item)
+		# print()
+		player = item.a.span.text #works for full name
+		# print(player)
+
+		soup2 = BeautifulSoup(str(item), 'lxml')
+		index = soup2.find('a', class_='item index') #works
+		# index = players.a.text
+		# print(index.text)
+		# print()
+		player_dict[str(player)] = str(index.text)
+	
+	bill_index = input ("Bill's Index? ")
+	player_dict['Bill Strand'] = bill_index
+	return(player_dict)
+
+	# player = players.a.span.text #works for full name
+	# print(player)
+
+	# index = soup.find('a', class_='item index') #works
+	# # index = players.a.text
+	# print(index.text)
+
+# #-----WORKS FOR FIRST PLAYER-------------
+# 	players = soup.find('span', class_='item')
+# 	# print (players)
+
+# 	player = players.a.span.text #works for full name
+# 	print(player)
+
+# 	index = soup.find('a', class_='item index') #works
+# 	# index = players.a.text
+# 	print(index.text)
+# -----WORKS FOR FIRST PLAYER-------------
+
+# OLD CODE
+	# page = str(pg.read())
+	# name = re.findall('name">(.*?)<', str(page)) 
+
+	# # find handicap index from string, will only pull out leading '>'
+	# index = re.findall('>[0-9]+.[0-9]', str(page)) #index_text
+
+	# index_2 = []	# remove leading '>'
+	# for item in index:
+	# 	item = item[1:] #slice from position 1 on...
+	# 	index_2.append(item)
+
+	# zipObj = zip(name, index_2) #create a dict from 2 lists
+	# player_dict = dict(zipObj)
+	# bill_index = input ("Bill's Index? ")
+	# player_dict['Bill Strand'] = bill_index
+	# print (f'player_dict: \n {player_dict}')
+
+
+
+#------------------------file end-------------------------------
+def main2():
+	print('MAIN2, TESTING FOR BEAUTIFUL SOUP')
+	print('-------------------------------------------------------')
+	file_name = input ("What is the input filename? > ")
+	# print('calling get_index_from_text_file')
+	# player_dict = get_index_from_text_file2(file_name) #take copy/pasted html and save to file named: 2020-01-05.txt
+	player_dict = get_index_from_text_file2(file_name) #player_dict = 
+
+	tpc_list = []  #accumulate list of handicaps for sorting purposes
+	cwv_list = []  #accumulate list of handicaps for sorting purposes
+
+	# print ('computing handicaps')
+	for player in player_dict:
+		h_i = float(player_dict[player])
+		name = player
+
+		handicap_tpc = compute_handicap_tpc(h_i, tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72) 
+		tpc_list.append(handicap_tpc)
+		handicap_cwv = compute_handicap_cwv(h_i, cwv_slope_white_71, cwv_rating_white_71, cwv_hcp_71)
+		cwv_list.append(handicap_cwv)
+		# print(f"Name: {name} Index: {h_i}, TPC: {handicap_tpc}, CWV: {handicap_cwv}")
+
+
+	#determine lowest handicap
+	tpc_list.sort()
+	tpc_min = tpc_list[0] #lowest TPC handicap
+	cwv_list.sort()
+	cwv_min = cwv_list[0] #lowest CWV handicap
+
+
+	#for printing purposes only, REDUNDANT from above
+	# results_list = [["   ", "   ",  "TPC", "TPC", "CWV", "CWV"], ["Name", "Index","HCP", "Strokes", "HCP", "Strokes"]]#, ["-------","-----",  "---",  "-------",  "---",  "-------"]]
+	results_list = []
+	for player in player_dict:
+		tpc_handicap = compute_handicap_tpc(float(player_dict[player]), tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72)
+		cwv_handicap = compute_handicap_cwv(float(player_dict[player]), cwv_slope_white_71, cwv_rating_white_71, cwv_hcp_71)
+		# print(f" {name_dict[player]} : {player_dict[player]}, TPC: {tpc_handicap} ({tpc_handicap-tpc_min}), CWV: {cwv_handicap} ({cwv_handicap-cwv_min})")
+		results = [name_dict[player], player_dict[player], tpc_handicap, tpc_handicap-tpc_min, cwv_handicap, cwv_handicap-cwv_min]
+		results_list.append(results)
+
+	results_list.sort()
+	results_list.insert(0,["   ", "   ",  "TPC", "TPC", "CWV", "CWV"])
+	results_list.insert(1,["Name", "Index","(72)", "Strks", "(71)", "Strks"])
+	today = datetime.now()
+	today = today.strftime("%B %d, %Y %H:%M")
+
+	# print('-------------------------------------------------------')
+	print("\n \n Today's date:", today)
+
+	print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
+	print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
+	print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
+	print ('  (Course Rating - Par)')
+	print('--------------------------------------------------------')
+
+def AllHandicaps(f_h_i):
+	f_h_i = input ("Your Handicap Index: ")
 	f_h_i = float(f_h_i)
-	print (f"Frank's Handicap Index: {f_h_i}")
-	print (f"Frank's Handicaps:  ")
+	print (f"Your Handicap Index: {f_h_i}")
+	print (f"Your Handicaps:  ")
 
 
 		# TPC 70 White
@@ -238,5 +367,7 @@ def FrankHandicaps(f_h_i):
 	
 #--------------------START CODE EXECUTION-----------------------------
 
-main()
-# FrankHandicaps('14.7')
+# <section class="golfer_lookup_section"> is copied to text file...
+# main()
+# main2()
+# AllHandicaps('0')
