@@ -158,7 +158,6 @@ def main():
 
 		print('-------------------------------------------------------')
 		print("\n \n Today's date:", today)
-		print(f" File name: {file_name}")
 
 
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
