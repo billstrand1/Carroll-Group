@@ -44,14 +44,14 @@ tpc_rating_blue_72 = 72.4
 
 cwv_hcp_71 = 71
 
-cwv_slope_white_71 = 130
+cwv_slope_white_71 = 128
 cwv_rating_white_71 = 69.3
 
-cwv_slope_gold_71 = 132
-cwv_rating_gold_71 = 70.3
+cwv_slope_gold_71 = 130
+cwv_rating_gold_71 = 70.4
 
-cwv_slope_blue_71 = 134
-cwv_rating_blue_71 = 71.2
+cwv_slope_blue_71 = 132
+cwv_rating_blue_71 = 71.4
 
 name_dict = {'Jack Carroll': 'Jack', 
 	'Bob Heard': 'Bob H.', 
@@ -113,7 +113,10 @@ def get_index_from_text_file(file_name):
 def main():
 	print('BEAUTIFUL SOUP process')
 	print('-------------------------------------------------------')
-	file_name = input ("What is the input filename? > ")
+	today = datetime.now()
+	file_name = today.strftime("%Y-%m-%d.txt")
+
+	# file_name = input ("What is the input filename? > ")
 	player_dict = get_index_from_text_file(file_name)
 
 	tpc_list = []  #accumulate list of handicaps for sorting purposes
@@ -188,7 +191,7 @@ def main():
 
 
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
+		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
 		print(f"File name: {file_name}")
@@ -214,7 +217,7 @@ def main():
 		print("\n \n Today's date:", today)
 
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
+		print (f"CWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
 		print(f"File name: {file_name}")
