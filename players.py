@@ -1,3 +1,64 @@
+# for use with ghinxl.py
+# contains the name dictionary and Player class
+# contains the course handicap information
+
+print ('PLAYERS.PY HAS BEEN IMPORTED')
+#--------------------CONSTANTS-----------------------------
+tpc_hcp_70 = 70
+tpc_hcp_72 = 72
+
+tpc_slope_white_70 = 128
+tpc_rating_white_70 = 69.4
+
+tpc_slope_white_72 = 127
+tpc_rating_white_72 = 70.1
+
+tpc_slope_gold_70 = 132
+tpc_rating_gold_70 = 70.2
+
+tpc_slope_gold_72 = 133
+tpc_rating_gold_72 = 70.8
+
+tpc_slope_blue_70 = 136
+tpc_rating_blue_70 = 72.0
+
+tpc_slope_blue_72 = 137
+tpc_rating_blue_72 = 72.4
+
+
+cwv_hcp_71 = 71
+
+cwv_slope_white_71 = 128
+cwv_rating_white_71 = 69.3
+
+cwv_slope_gold_71 = 130
+cwv_rating_gold_71 = 70.4
+
+cwv_slope_blue_71 = 132
+cwv_rating_blue_71 = 71.4
+#--------------------END CONSTANTS-----------------------------
+
+
+name_dict = {'Jack Carroll': 'Jack', 
+	'Bob Heard': 'Bob H.', 
+	'Larry Traub': 'Larry', 
+	'Jim Sido': 'Jim S.', 
+	'Curt Fitzgerald': 'Curt', 
+	'Jimmy Wickham': 'Jimmy', 
+	'Richard Humphrey': 'Hump', 
+	'Kent Fannon': 'Kent', 
+	'Bill Barnard': 'Bill B.', 
+	'Doug Williams': 'Doug', 
+	'Rocky Duron': 'Rocky', 
+	'Will Davis': 'Will', 
+	'Reid Baker': 'Reid', 
+	'Bill Strand': 'Bill S.', 
+	'Bill  Strand': 'Bill S.', 
+	'Rick Baumgarth': 'Trick', 
+	'Rick Besse': 'Besse', 
+	'Dan Stewart': 'Dan', 
+	'Al Vela': 'Al', 
+	'Frank Broyles': 'Frank'}
 
 
 class Player:
@@ -8,6 +69,17 @@ class Player:
 		self.birthday = birthday
 		self.cell_phone = cell_phone
 		self.ghin_name = ghin_name
+		self.h_i = 0
+		self.handicap_tpc = 0
+		self.handicap_cwv = 0
+
+	def class_tpc_white_72(self): 
+		# self.handicap_tpc = (round ((self.h_i * tpc_slope_white_72 / 113) + (tpc_rating_white_72 - tpc_hcp_72))) 
+		self.handicap_tpc = (round ((self.h_i * tpc_slope_white_72 / 113) + (tpc_rating_white_72 - tpc_hcp_72))) 
+
+	def class_cwv_white_71(self):
+		# self.handicap_cwv = (round ((self.h_i * cwv_slope_white_71 / 113) + (cwv_rating_white_71 - cwv_hcp_71)))  
+		self.handicap_cwv = (round ((self.h_i * cwv_slope_white_71 / 113) + (cwv_rating_white_71 - cwv_hcp_71)))  
 
 
 Al		= Player('Al', '3661029', 'txanv3@verizon.net', '12/24/1940', '(214) 405-6475', 'Al Vela')
@@ -32,7 +104,8 @@ Will	= Player('Will', '1815996', 'vanhorn_davis@verizon.net', '09/11/1952', '(56
  
 player_list = [Al, Besse, BillB, BillS, Bob, Curt,Dan, Doug, Frank, Hump, Jack, JimS, Jimmy, Kent, Larry, Reid, Rocky, Trick, Will]	
 
-i = 1
-for player in player_list:
-	print player.ghin_name, ', ', player.ghin_no
-	i += 1	
+
+# i = 1
+# for player in player_list:
+# 	print (player.ghin_name, ', ', player.ghin_no)
+	# i += 1	

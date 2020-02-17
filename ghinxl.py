@@ -1,16 +1,17 @@
-#ghin_lookup.py
-#uploaded to Git, test comment update.
+# Updated for Excel utilization
 
 
 from tabulate import tabulate
-import re
 from datetime import datetime
-from bs4 import BeautifulSoup
-import pprint
+from openpyxl import load_workbook
+from pprint import pprint
+import os
 
+# contains the name dictionary and Player class
+# contains the course handicap information
+from players import *
 
-
-# Under the new WHS, however, course handicaps reflect the strokes you get in relation to par with a subtle but significant change to the formula.
+# "Under the new WHS, however, course handicaps reflect the strokes you get in relation to par with a subtle but significant change to the formula.""
 # Course Handicap = Handicap Index x (Slope Rating/113) + (Course Rating - par)
 
 def compute_handicap_tpc(h_i, slope, rating, handicap): 
@@ -19,120 +20,92 @@ def compute_handicap_tpc(h_i, slope, rating, handicap):
 def compute_handicap_cwv(h_i, slope, rating, handicap):
 	return (round ((h_i * slope / 113) + (rating - handicap)))  
 
-#--------------------START LIST, DICT DEFINITIONS-----------------------------
-tpc_hcp_70 = 70
-tpc_hcp_72 = 72
 
-tpc_slope_white_70 = 128
-tpc_rating_white_70 = 69.4
-
-tpc_slope_white_72 = 127
-tpc_rating_white_72 = 70.1
-
-tpc_slope_gold_70 = 132
-tpc_rating_gold_70 = 70.2
-
-tpc_slope_gold_72 = 133
-tpc_rating_gold_72 = 70.8
-
-tpc_slope_blue_70 = 136
-tpc_rating_blue_70 = 72.0
-
-tpc_slope_blue_72 = 137
-tpc_rating_blue_72 = 72.4
-
-
-cwv_hcp_71 = 71
-
-cwv_slope_white_71 = 128
-cwv_rating_white_71 = 69.3
-
-cwv_slope_gold_71 = 130
-cwv_rating_gold_71 = 70.4
-
-cwv_slope_blue_71 = 132
-cwv_rating_blue_71 = 71.4
-
-name_dict = {'Jack Carroll': 'Jack', 
-	'Bob Heard': 'Bob H.', 
-	'Larry Traub': 'Larry', 
-	'Jim Sido': 'Jim S.', 
-	'Curt Fitzgerald': 'Curt', 
-	'Jimmy Wickham': 'Jimmy', 
-	'Richard Humphrey': 'Hump', 
-	'Kent Fannon': 'Kent', 
-	'Bill Barnard': 'Bill B.', 
-	'Doug Williams': 'Doug', 
-	'Rocky Duron': 'Rocky', 
-	'Will Davis': 'Will', 
-	'Reid Baker': 'Reid', 
-	'Bill Strand': 'Bill S.', 
-	'Rick Baumgarth': 'Trick', 
-	'Rick Besse': 'Besse', 
-	'Dan Stewart': 'Dan', 
-	'Al Vela': 'Al', 
-	'Frank Broyles': 'Frank'}
-
-
-
-#--------------------START CODE EXECUTION - TRY BEAUTIFUL SOUP-----------------------------
+#--------------------START CODE EXECUTION -Excel HI's-----------------------------
 #------------------------file start-------------------------------
-def get_index_from_text_file(file_name):
-	# print('enter get_index_from_text_file')
+
+#When using the File from Brechin
+def get_index_from_xl_file():
+	wb = load_workbook(filename = 'Handicap Index Course Handicap Report.xlsx')
+	# pprint ('load_workbook worked into wb')
+
+	ws = wb['Sheet1']  #This may change with new File Export from Tap Forms
+	# pprint ('sheet loaded into ws')
+
 	player_dict = {}
-	pg = open(file_name)
-	soup = BeautifulSoup(pg, 'lxml')
-	# print(soup)
-	index = 0
-	# no good: players = soup.find('div', class_='panel')
+	#WORKS, print range of cells
+	for i in range(2, 21):
+		golfer_name = (ws.cell(row=i, column=3).value)
+		h_i = (ws.cell(row=i, column=4).value)
 
-#-----TRY MULTI PLAYER WITH FINDALL--
-	players = soup.find_all('span', class_='item')
-	# print(type(players))
+		#returning all players
+		player_dict[str(golfer_name)] = str(h_i)
+		
+		# returning only players that are playing
+		#To confirm if golfer is playing
+		# status = input(f'Is {golfer_name} playing?')
+		# if status == 'y':
+		# 	player_dict[str(golfer_name)] = str(h_i)
 
-	for item in players: #soup.find_all('span', class_='item'):
-		# print (item)
-		# print()
-		player = item.a.span.text #works for full name
+	# pprint(player_dict)
 
-		soup2 = BeautifulSoup(str(item), 'lxml')
-		index = soup2.find('a', class_='item index') #works
-		# index = players.a.text
-		# print(index.text)
-		# print()
-		status = input(f'Is {player} playing?')
-		if status == 'y':
-			player_dict[str(player)] = str(index.text)
-	
-	bill_index = input ("Bill's Index? ")
-	player_dict['Bill Strand'] = bill_index
-	return(player_dict)
-
-
+	return(player_dict) 
 
 #------------------------file end-------------------------------
 def main():
-	print('BEAUTIFUL SOUP process')
-	print('-------------------------------------------------------')
+	# print('-------------------------------------------------------')
 	today = datetime.now()
-	file_name = today.strftime("%Y-%m-%d.txt")
 
-	# file_name = input ("What is the input filename? > ")
-	player_dict = get_index_from_text_file(file_name)
+	player_dict = get_index_from_xl_file()
 
 	tpc_list = []  #accumulate list of handicaps for sorting purposes
 	cwv_list = []  #accumulate list of handicaps for sorting purposes
 
-	# print ('computing handicaps')
+#----------------Try using Players Class -------------	LATER
+	#print player names in player class list
+	#TODO:  Complete the Smartsheet sign-up list and
+	# add a 'signed-up' variable to the Player class.
+	#Once updated, limit the player_dict to those signed-up and print
+	#out their email addresses below the table... then only email to 
+	#those signed up.
+
 	for player in player_dict:
 		h_i = float(player_dict[player])
 		name = player
+		for player_in_class in player_list:
+			if name == player_in_class.ghin_name:
+				player_in_class.h_i = h_i
+				# player_in_class.handicap_tpc = player_in_class.class_tpc_white_72()
+				# player_in_class.handicap_cwv = player_in_class.class_cwv_white_71()
+				player_in_class.class_tpc_white_72()
+				player_in_class.class_cwv_white_71()
 
-		handicap_tpc = compute_handicap_tpc(h_i, tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72) 
-		tpc_list.append(handicap_tpc)
-		handicap_cwv = compute_handicap_cwv(h_i, cwv_slope_white_71, cwv_rating_white_71, cwv_hcp_71)
-		cwv_list.append(handicap_cwv)
+	for guy in player_list:
+		print (f'{guy.signup_name} = {guy.h_i}, TPC = {guy.handicap_tpc}, CWV = {guy.handicap_cwv}')
+		tpc_list.append(guy.handicap_tpc)
+		cwv_list.append(guy.handicap_cwv)
+
+			# if name == person.signup_name:
+				# print (f' {name} matches {person.signup_name}')
+
+
+		# handicap_tpc = compute_handicap_tpc(h_i, tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72) 
+		# tpc_list.append(handicap_tpc)
+		# handicap_cwv = compute_handicap_cwv(h_i, cwv_slope_white_71, cwv_rating_white_71, cwv_hcp_71)
+		# cwv_list.append(handicap_cwv)
 		# print(f"Name: {name} Index: {h_i}, TPC: {handicap_tpc}, CWV: {handicap_cwv}")
+# #---------------------------------------------------
+
+	# print ('computing handicaps')
+	# for player in player_dict:
+	# 	h_i = float(player_dict[player])
+	# 	name = player
+
+	# 	handicap_tpc = compute_handicap_tpc(h_i, tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72) 
+	# 	tpc_list.append(handicap_tpc)
+	# 	handicap_cwv = compute_handicap_cwv(h_i, cwv_slope_white_71, cwv_rating_white_71, cwv_hcp_71)
+	# 	cwv_list.append(handicap_cwv)
+	# 	# print(f"Name: {name} Index: {h_i}, TPC: {handicap_tpc}, CWV: {handicap_cwv}")
 
 
 	#determine lowest handicap
@@ -158,7 +131,7 @@ def main():
 		results_list.insert(0,["   ", "   ",  "TPC", "TPC", "CWV", "CWV"])
 		results_list.insert(1,["Name", "Index","(72)", "Strks", "(71)", "Strks"])
 		today = datetime.now()
-		today = today.strftime("%B %d, %Y %H:%M")
+		today = today.strftime("%B %d, %Y")
 
 		print('-------------------------------------------------------')
 		print("\n \n Today's date:", today)
@@ -168,7 +141,7 @@ def main():
 		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
-		print(f"File name: {file_name}")
+		# print(f"File name: {file_name}")
 		print('--------------------------------------------------------')
 
 	elif choice == 'T' or choice == 't':
@@ -184,7 +157,7 @@ def main():
 		results_list.insert(0,["   ", "   ",  "TPC HCP", "TPC"])
 		results_list.insert(1,["Name", "Index","Par 72", "Strokes"])
 		today = datetime.now()
-		today = today.strftime("%B %d, %Y %H:%M")
+		today = today.strftime("%B %d, %Y")
 
 
 		print('-------------------------------------------------------')
@@ -195,7 +168,7 @@ def main():
 		print (f"TPC: {tpc_rating_white_72} / {tpc_slope_white_72} / Par {tpc_hcp_72}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
-		print(f"File name: {file_name}")
+		# print(f"File name: {file_name}")
 		print('--------------------------------------------------------')
 
 
@@ -212,7 +185,7 @@ def main():
 		results_list.insert(0,["   ", "   ", "CWV HCP", "CWV"])
 		results_list.insert(1,["Name", "Index","Par 71", "Strokes"])
 		today = datetime.now()
-		today = today.strftime("%B %d, %Y %H:%M")
+		today = today.strftime("%B %d, %Y")
 
 		print('-------------------------------------------------------')
 		print("\n \n Today's date:", today)
@@ -221,7 +194,7 @@ def main():
 		print (f"CWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
 		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
 		print ('  (Course Rating - Par)')
-		print(f"File name: {file_name}")
+		# print(f"File name: {file_name}")
 		print('--------------------------------------------------------')
 
 
