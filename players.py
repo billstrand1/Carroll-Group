@@ -2,7 +2,7 @@
 # contains the name dictionary and Player class
 # contains the course handicap information
 
-print ('PLAYERS.PY HAS BEEN IMPORTED')
+# print ('PLAYERS.PY HAS BEEN IMPORTED')
 #--------------------CONSTANTS-----------------------------
 tpc_hcp_70 = 70
 tpc_hcp_72 = 72
@@ -25,7 +25,6 @@ tpc_rating_blue_70 = 72.0
 tpc_slope_blue_72 = 137
 tpc_rating_blue_72 = 72.4
 
-
 cwv_hcp_71 = 71
 
 cwv_slope_white_71 = 128
@@ -37,7 +36,6 @@ cwv_rating_gold_71 = 70.4
 cwv_slope_blue_71 = 132
 cwv_rating_blue_71 = 71.4
 #--------------------END CONSTANTS-----------------------------
-
 
 name_dict = {'Jack Carroll': 'Jack', 
 	'Bob Heard': 'Bob H.', 
@@ -60,7 +58,6 @@ name_dict = {'Jack Carroll': 'Jack',
 	'Al Vela': 'Al', 
 	'Frank Broyles': 'Frank'}
 
-
 class Player:
 	def __init__ (self, signup_name, ghin_no, email, birthday, cell_phone, ghin_name):
 		self.signup_name = signup_name
@@ -74,16 +71,14 @@ class Player:
 		self.handicap_cwv = 0
 
 	def class_tpc_white_72(self): 
-		# self.handicap_tpc = (round ((self.h_i * tpc_slope_white_72 / 113) + (tpc_rating_white_72 - tpc_hcp_72))) 
 		self.handicap_tpc = (round ((self.h_i * tpc_slope_white_72 / 113) + (tpc_rating_white_72 - tpc_hcp_72))) 
 
 	def class_cwv_white_71(self):
-		# self.handicap_cwv = (round ((self.h_i * cwv_slope_white_71 / 113) + (cwv_rating_white_71 - cwv_hcp_71)))  
 		self.handicap_cwv = (round ((self.h_i * cwv_slope_white_71 / 113) + (cwv_rating_white_71 - cwv_hcp_71)))  
 
 
 Al		= Player('Al', '3661029', 'txanv3@verizon.net', '12/24/1940', '(214) 405-6475', 'Al Vela')
-Besse 	= Player('Besse',	'3660283', 'rick@rickbesse.com', '10/07/1943', '(214) 850-7100', 'Rick Besse')
+Besse 	= Player('Besse', '3660283', 'rick@rickbesse.com', '10/07/1943', '(214) 850-7100', 'Rick Besse')
 BillB	= Player('Bill B.','5910694', 'wbarnard96@aol.com',	'07/15/1953','(817) 800-0659', 'Bill Barnard')
 BillS	= Player('Bill S.','0053161', 'billstrand1@yahoo.com', '10/23/1961', '(469) 774-7607', 'Bill  Strand')
 Bob		= Player('Bob','3660603', 'bheard3321@gmail.com', '06/10/1951', '(214) 995-3050', 'Bob Heard')
