@@ -77,7 +77,7 @@ class Player:
 		self.handicap_cwv = (round ((self.h_i * cwv_slope_white_71 / 113) + (cwv_rating_white_71 - cwv_hcp_71)))  
 
 
-Al		= Player('Al', '3661029', 'txanv3@verizon.net', '12/24/1940', '(214) 405-6475', 'Al Vela')
+Al 		= Player('Al', '3661029', 'txanv3@verizon.net', '12/24/1940', '(214) 405-6475', 'Al Vela')
 Besse 	= Player('Besse', '3660283', 'rick@rickbesse.com', '10/07/1943', '(214) 850-7100', 'Rick Besse')
 BillB	= Player('Bill B.','5910694', 'wbarnard96@aol.com',	'07/15/1953','(817) 800-0659', 'Bill Barnard')
 BillS	= Player('Bill S.','0053161', 'billstrand1@yahoo.com', '10/23/1961', '(469) 774-7607', 'Bill  Strand')
