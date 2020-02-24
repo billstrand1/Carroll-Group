@@ -70,6 +70,9 @@ class Player:
 		self.handicap_tpc = 0
 		self.handicap_cwv = 0
 
+	def class_tpc_white_70(self): 
+		self.handicap_tpc = (round ((self.h_i * tpc_slope_white_70 / 113) + (tpc_rating_white_70 - tpc_hcp_70))) 
+
 	def class_tpc_white_72(self): 
 		self.handicap_tpc = (round ((self.h_i * tpc_slope_white_72 / 113) + (tpc_rating_white_72 - tpc_hcp_72))) 
 
