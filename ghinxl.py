@@ -23,11 +23,13 @@ def get_indexes_from_xl_file():
 		golfer_name = (ws.cell(row=i, column=3).value)
 		h_i = (float(ws.cell(row=i, column=4).value))
 
+
 		for guy in player_list:
 			if golfer_name == guy.ghin_name:
 				guy.h_i = h_i
 				guy.class_tpc_white_70()
 				guy.class_cwv_white_71()
+				# print (f" {golfer_name}, hi: {guy.h_i}, tpc: {guy.handicap_tpc_70} cwv: {guy.handicap_cwv_71}")
 
 
 #----------------------Functions end-------------------------------
@@ -72,9 +74,10 @@ def main():
 		print('-------------------------------------------------------')
 		print("\n \n Today's date:", today)
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		print (f"TPC: {tpc_rating_white_70} / {tpc_slope_white_70} / Par {tpc_hcp_70} \nCWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
-		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
-		print ('  (Course Rating - Par)')
+		print (f"TPC: CR = {tpc_rating_white_70} | SR = {tpc_slope_white_70} | Par = {tpc_hcp_70} \nCWV: CR = {cwv_rating_white_71} | SR = {cwv_slope_white_71} | Par = {cwv_hcp_71}")
+		# print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
+		# print ('  (Course Rating - Par)')
+		print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
 		print('--------------------------------------------------------')
 
 	elif choice == 'T' or choice == 't':
@@ -93,9 +96,14 @@ def main():
 		print('-------------------------------------------------------')
 		print("\n \n Today's date:", today)
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		print (f"TPC: {tpc_rating_white_70} / {tpc_slope_white_70} / Par {tpc_hcp_70}")
-		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
-		print ('  (Course Rating - Par)')
+		# print (f"TPC: {tpc_rating_white_70} / {tpc_slope_white_70} / Par {tpc_hcp_70}")
+		# print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
+		# print ('  (Course Rating - Par)')
+
+		print (f"TPC: CR = {tpc_rating_white_70} | SR = {tpc_slope_white_70} | Par = {tpc_hcp_70}")
+		print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
+		# print ('  (Course Rating - Par)')
+
 		print('--------------------------------------------------------')
 
 	elif choice == 'C' or choice == 'c':
@@ -115,9 +123,10 @@ def main():
 		print("\n \n Today's date:", today)
 
 		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		print (f"CWV: {cwv_rating_white_71} / {cwv_slope_white_71} / Par {cwv_hcp_71}")
-		print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
-		print ('  (Course Rating - Par)')
+		print (f"CWV: CR = {cwv_rating_white_71} | SR = {cwv_slope_white_71} | Par = {cwv_hcp_71}")
+		# print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
+		# print ('  (Course Rating - Par)')
+		print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
 		print('--------------------------------------------------------')
 
 	for player in player_list:
