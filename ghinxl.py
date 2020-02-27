@@ -6,108 +6,60 @@ from openpyxl import load_workbook
 from pprint import pprint
 import os
 
-# contains the name dictionary and Player class, course handicap information
+# contains the name dictionary and Player class, course handicap information, player status
 from players import *
 
 # cd documents/github/Carroll-Group
 
 #--------------------Functions -Excel HI's-----------------------------
 
-#When using the File from Brechin
+#When using the Excel File from Golf Genius
 def get_indexes_from_xl_file():
 	wb = load_workbook(filename = 'Handicap Index Course Handicap Report.xlsx')
+	# print(wb)
 	ws = wb['Sheet1']
+	# print(ws)
 
 	#Retrieve the player's indexes, compute handicaps
 	for i in range(2, 21):
+		print(i)
 		golfer_name = (ws.cell(row=i, column=3).value)
-		h_i = (float(ws.cell(row=i, column=4).value))
+		print(golfer_name)
+		# h_i = (float(ws.cell(row=i, column=4).value))
 
 
-		for guy in player_list:
-			if golfer_name == guy.ghin_name:
-				guy.h_i = h_i
-				guy.class_tpc_white_70()
-				guy.class_cwv_white_71()
-				# print (f" {golfer_name}, hi: {guy.h_i}, tpc: {guy.handicap_tpc_70} cwv: {guy.handicap_cwv_71}")
+		#Update handicap info in Player Calss
+		for player in player_list:
+			if golfer_name == player.ghin_name:
+				player.h_i = h_i
+				player.class_tpc_white_70()
+				player.class_tpc_white_72()
+				player.class_cwv_white_71()
+				# print (f" {golfer_name}, hi: {player.h_i}, tpc 70: {player.handicap_tpc_70}, tpc 72: {player.handicap_tpc_72} cwv: {player.handicap_cwv_71}")
 
-
-#----------------------Functions end-------------------------------
-def main():
-	# print('-------------------------------------------------------')
+#------------------PRINT OUT TABLE OF INDEXES / HANDICAPS / STROKES OFF LOW HANDICAP----------
+def print_results(tpc_min_70,tpc_min_72, cwv_min):  
 	today = datetime.now()
+	today = today.strftime("%B %d, %Y")
 
-	get_indexes_from_xl_file()
+	results_list = []
 
-	tpc_list = []  #accumulate list of handicaps for sorting purposes
-	cwv_list = []  #accumulate list of handicaps for sorting purposes
+	choice = input ("[T]PC or [C]WV > ")
 
-	#TODO:  Complete the Smartsheet sign-up list to update player.playing
-
-	for guy in player_list:
-		if guy.playing:
-			tpc_list.append(guy.handicap_tpc_70)
-			cwv_list.append(guy.handicap_cwv_71)
- #---------------------------------------------------
-
-	#determine lowest handicap
-	tpc_list.sort()
-	tpc_min = tpc_list[0] #lowest TPC handicap
-	cwv_list.sort()
-	cwv_min = cwv_list[0] #lowest CWV handicap
-
-	choice = input ("[T]PC, [C]WV, or [B]oth? > ")
-
-	if choice == 'B' or choice == 'b':
-		results_list = []
+	if choice == 'T' or choice == 't':
 		for player in player_list:
 			if player.playing:
-				results = [player.signup_name, player.h_i, player.handicap_tpc_70, player.handicap_tpc_70-tpc_min, player.handicap_cwv_71, player.handicap_cwv_71-cwv_min]
+				results = [player.signup_name, player.h_i, player.handicap_tpc_70, player.handicap_tpc_70 - tpc_min_70, player.handicap_tpc_72, player.handicap_tpc_72 - tpc_min_72]
 				results_list.append(results)
 
 		results_list.sort()
-		results_list.insert(0,["   ", "   ",  "TPC", "TPC", "CWV", "CWV"])
-		results_list.insert(1,["Name", "Index","(70)", "Strks", "(71)", "Strks"])
-		today = datetime.now()
-		today = today.strftime("%B %d, %Y")
-
-		print('-------------------------------------------------------')
-		print("\n \n Today's date:", today)
-		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		print (f"TPC: CR = {tpc_rating_white_70} | SR = {tpc_slope_white_70} | Par = {tpc_hcp_70} \nCWV: CR = {cwv_rating_white_71} | SR = {cwv_slope_white_71} | Par = {cwv_hcp_71}")
-		# print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
-		# print ('  (Course Rating - Par)')
-		print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
-		print('--------------------------------------------------------')
-
-	elif choice == 'T' or choice == 't':
-		results_list = []
-		for player in player_list:
-			if player.playing:
-				results = [player.signup_name, player.h_i, player.handicap_tpc_70, player.handicap_tpc_70-tpc_min] #, player.handicap_cwv, player.handicap_cwv-cwv_min]
-				results_list.append(results)
-
-		results_list.sort()
-		results_list.insert(0,["   ", "   ",  "TPC HCP", "TPC"])
-		results_list.insert(1,["Name", "Index","Par 70", "Strokes"])
-		today = datetime.now()
-		today = today.strftime("%B %d, %Y")
-
-		print('-------------------------------------------------------')
-		print("\n \n Today's date:", today)
-		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		# print (f"TPC: {tpc_rating_white_70} / {tpc_slope_white_70} / Par {tpc_hcp_70}")
-		# print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
-		# print ('  (Course Rating - Par)')
-
-		print (f"TPC: CR = {tpc_rating_white_70} | SR = {tpc_slope_white_70} | Par = {tpc_hcp_70}")
-		print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
-		# print ('  (Course Rating - Par)')
-
-		print('--------------------------------------------------------')
+		results_list.insert(0,["   ", "   ",  "TPC", "TPC-70", "TPC", "TPC-72"])
+		results_list.insert(1,["Name", "Index","(70)", "Strks", "(72)", "Strks"])
+		column_print_alignment = list(("right","right","right","right", "right", "right"))
+		course_info = f"TPC 70: CR = {tpc_rating_white_70} | SR = {tpc_slope_white_70} | Par = {tpc_hcp_70} \n"
+		course_info = course_info + f"TPC 72: CR = {tpc_rating_white_72} | SR = {tpc_slope_white_72} | Par = {tpc_hcp_72}"
 
 	elif choice == 'C' or choice == 'c':
-		results_list = []
 		for player in player_list:
 			if player.playing:
 				results = [player.signup_name, player.h_i, player.handicap_cwv_71, player.handicap_cwv_71-cwv_min]
@@ -116,71 +68,58 @@ def main():
 		results_list.sort()
 		results_list.insert(0,["   ", "   ", "CWV HCP", "CWV"])
 		results_list.insert(1,["Name", "Index","Par 71", "Strokes"])
-		today = datetime.now()
-		today = today.strftime("%B %d, %Y")
+		column_print_alignment = list(("right","right","right","right"))
+		course_info = f"CWV: CR = {cwv_rating_white_71} | SR = {cwv_slope_white_71} | Par = {cwv_hcp_71}"
 
-		print('-------------------------------------------------------')
-		print("\n \n Today's date:", today)
-
-		print (tabulate(results_list, tablefmt='fancy_grid', colalign=("right","right","right","right"))) #, headers=["Name","Index", "TPC HCP", "TPC Strokes", "CWV HCP", "CWV Strokes"]))
-		print (f"CWV: CR = {cwv_rating_white_71} | SR = {cwv_slope_white_71} | Par = {cwv_hcp_71}")
-		# print ('Course Handicap = Handicap Index x (Slope Rating/113) +')
-		# print ('  (Course Rating - Par)')
-		print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
-		print('--------------------------------------------------------')
-
+	else: print('Bad Choice')
+	
+	#Finish printout:
+	print('-------------------------------------------------------')
+	print("\n \n Today's date:", today)
+	print (tabulate(results_list, tablefmt='fancy_grid', colalign=column_print_alignment))
+	print(course_info)
+	print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
+	print('--------------------------------------------------------')
 	for player in player_list:
 		if player.playing:
 			print (player.email)
 	print("\n\n")
-# --------------------------------------
-def AllHandicaps(f_h_i):
-	f_h_i = input ("Your Handicap Index: ")
-	f_h_i = float(f_h_i)
-	print (f"Your Handicap Index: {f_h_i}")
-	print (f"Your Handicaps:  ")
+	#END-----------------PRINT OUT TABLE OF INDEXES / HANDICAPS / STROKES OFF LOW HANDICAP----------		
 
-		# TPC 70 White
-	handicap_tpc = compute_handicap_tpc(f_h_i, tpc_slope_white_70, tpc_rating_white_70, tpc_hcp_70)
-	print (f' TPC White Par 70:  {handicap_tpc}, ({tpc_slope_white_70} / {tpc_rating_white_70}, / {tpc_hcp_70})')
+def main():
+	#Update the indexes of all players from the excel file
+	get_indexes_from_xl_file()
 
-		# TPC 70 Gold
-	handicap_tpc = compute_handicap_tpc(f_h_i, tpc_slope_gold_70, tpc_rating_gold_70, tpc_hcp_70)
-	print (f' TPC Gold  Par 70:  {handicap_tpc}, ({tpc_slope_gold_70} / {tpc_rating_gold_70}, / {tpc_hcp_70})')
+	#accumulate list of handicaps for sorting purposes
+	tpc_list_70 = []
+	tpc_list_72 = [] 
+	cwv_list = [] 
 
-		# TPC 70 Blue
-	handicap_tpc = compute_handicap_tpc(f_h_i, tpc_slope_blue_70, tpc_rating_blue_70, tpc_hcp_70)
-	print (f' TPC Blue  Par 70:  {handicap_tpc}, ({tpc_slope_blue_70} / {tpc_rating_blue_70}, / {tpc_hcp_70})')
+	#TODO:  Complete the Smartsheet sign-up list to update player.playing
 
-	print("")
-		# TPC 72 White
-	handicap_tpc = compute_handicap_tpc(f_h_i, tpc_slope_white_72, tpc_rating_white_72, tpc_hcp_72)
-	print (f' TPC White Par 72:  {handicap_tpc}, ({tpc_slope_white_72} / {tpc_rating_white_72}, / {tpc_hcp_72})')
+	for player in player_list:
+		if player.playing:
+			tpc_list_70.append(player.handicap_tpc_70)
+			tpc_list_72.append(player.handicap_tpc_72)
+			cwv_list.append(player.handicap_cwv_71)
 
-	# TPC 72 Gold
-	handicap_tpc = compute_handicap_tpc(f_h_i, tpc_slope_gold_72, tpc_rating_gold_72, tpc_hcp_72)
-	print (f' TPC Gold  Par 72:  {handicap_tpc}, ({tpc_slope_gold_72} / {tpc_rating_gold_72}, / {tpc_hcp_72})')
+	#determine lowest handicaps
+	tpc_list_70.sort()
+	tpc_min_70 = tpc_list_70[0] #lowest TPC70 handicap
+	print(f"TPC 70 Min: {tpc_min_70}")
 
-	# TPC 72 Blue
-	handicap_tpc = compute_handicap_tpc(f_h_i, tpc_slope_blue_72, tpc_rating_blue_72, tpc_hcp_72)
-	print (f' TPC Blue  Par 72:  {handicap_tpc}, ({tpc_slope_blue_72} / {tpc_rating_blue_72}, / {tpc_hcp_72})')
+	tpc_list_72.sort()
+	tpc_min_72 = tpc_list_72[0] #lowest TPC72 handicap
+	print(f"TPC 72 Min: {tpc_min_72}")
 
-	print("")
-	# CWV 71 White
-	handicap_cwv = compute_handicap_cwv(f_h_i, cwv_slope_white_71, cwv_rating_white_71, cwv_hcp_71)
-	print (f' CWV White Par 71:  {handicap_cwv}, ({cwv_slope_white_71} / {cwv_rating_white_71}, / {cwv_hcp_71})')		
-	# CWV 71 Gold
-	handicap_cwv = compute_handicap_cwv(f_h_i, cwv_slope_gold_71, cwv_rating_gold_71, cwv_hcp_71)
-	print (f' CWV Gold  Par 71:  {handicap_cwv}, ({cwv_slope_gold_71} / {cwv_rating_gold_71}, / {cwv_hcp_71})')		
+	cwv_list.sort()
+	cwv_min = cwv_list[0] #lowest CWV handicap
+	print(f"CWV Min: {cwv_min}")
 
-	# CWV 71 Blue				
-	handicap_cwv = compute_handicap_cwv(f_h_i, cwv_slope_blue_71, cwv_rating_blue_71, cwv_hcp_71)
-	print (f' CWV Blue  Par 71:  {handicap_cwv}, ({cwv_slope_blue_71} / {cwv_rating_blue_71}, / {cwv_hcp_71})')		
-	
+	print_results(tpc_min_70,tpc_min_72, cwv_min)
+
 #--------------------START CODE EXECUTION-----------------------------
 
 # <section class="golfer_lookup_section"> is copied to text file...
 
 main()
-
-# AllHandicaps('0')
