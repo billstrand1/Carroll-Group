@@ -7,6 +7,9 @@
 
 from datetime import date
 from datetime import datetime
+from simple_smartsheet import Smartsheet
+from simple_smartsheet.models import Sheet, Column, Row, Cell
+
 # importing for scheduling an email
 # import schedule
 # import time
@@ -14,26 +17,21 @@ from datetime import datetime
 
 import pprint
 
-
-
-
-
 #-------------Simple Smartsheet-------------------
 
-from simple_smartsheet import Smartsheet
-from simple_smartsheet.models import Sheet, Column, Row, Cell
 TOKEN = '0b2269ovtwyvi1bmbqm15c2kg9'
+smartsheet = Smartsheet(TOKEN)
 # getting the sheet by name
 # JackSignUp = 1798700143011716
 
 sheet = smartsheet.sheets.get('Jack Sign-Up')
 
-
 # getting columns details by column title (case-sensitive)
-player_name = sheet.get_column("Player")
-pprint(player_column.__dict__)
-friday? = sheet.get_column("Fri?")
-pprint(friday_play_column.__dict__)
+# player_name = sheet.get_column("Player")
+# pprint(player_name.__dict__)
+# friday_data = sheet.get_column("Fri?")
+# pprint(friday_play_column.__dict__)
+
 
 #-------------Simple Smartsheet-------------------
 
@@ -82,40 +80,39 @@ pprint(friday_play_column.__dict__)
 
 
 #----------------------
-# getting a specific cell and updating it:
-# row_id_to_delete = None
-# rows_to_update = []
+
 
 #Creat a list of players on each day:
-# monday_list = [] 
-# wednesday_list = []
-# friday_list = [] 
+monday_list = [] 
+wednesday_list = []
+friday_list = [] 
 
-# for row in sheet.rows:
-#     player = row.get_cell("Player").value
-#     monday_play = row.get_cell("Mon?").value
-#     if monday_play: monday_list.append(player)
+for row in sheet.rows:
+    player = row.get_cell("Player").value
+    monday_play = row.get_cell("Mon?").value
+    if monday_play: monday_list.append(player)
 
-#     wednesday_play = row.get_cell("Wed?").value
-#     if wednesday_play: wednesday_list.append(player)
+    wednesday_play = row.get_cell("Wed?").value
+    if wednesday_play: wednesday_list.append(player)
 
-#     friday_play = row.get_cell("Fri?").value
-#     if monday_play: friday_list.append(player)
+    friday_play = row.get_cell("Fri?").value
+    if friday_play: friday_list.append(player)
+    print(f"{player}, Mon:{monday_play}, Wed:{wednesday_play}, Fri: {friday_play}")
 
 
 # s_monday_list = sorted(monday_list)
-# print("Monday:")
-# print(monday_list)
-# print ('')
+print("Monday:")
+pprint(monday_list
+print ('')
 
 # s_wednesday_list = sorted(wednesday_list)
-# print("Wednesday")
-# print (wednesday_list)
-# print ('')
+print("Wednesday")
+pprint (wednesday_list)
+print ('')
 
 # s_friday_list = sorted(friday_list)
-# print("Friday Only:")
-# print(friday_list)
+print("Friday :")
+pprint(friday_list)
 
 #-----------------------Tried Smartsheet directly-----
 # smart = smartsheet.Smartsheet(TOKEN)
