@@ -19,7 +19,10 @@ from players import *
 def get_indexes_from_xl_using_pandas():
     df = pd.read_excel('Handicap Index Course Handicap Report.xlsx', sheet_name='Sheet1')
     print('Sheet Loaded')
-    
+
+    i = 21
+    report_date = df['Golfer Name'][i]
+  
     for ind in range(19):
         golfer_name = df['Golfer Name'][ind]
         h_i = (float(df['H.I.'][ind]))
@@ -35,6 +38,8 @@ def get_indexes_from_xl_using_pandas():
                 player.class_tpc_white_72()
                 player.class_cwv_white_71()
                 player.playing = False
+
+    return (report_date)
 
 #NO LONGER USED, USE PANDAS
 #When using the Excel File from Golf Genius
@@ -115,7 +120,7 @@ def update_player_status(day_of_play):
 
 
 #------------------PRINT OUT TABLE OF INDEXES / HANDICAPS / STROKES OFF LOW HANDICAP----------
-def print_results_new(tpc_min_70,tpc_min_72, cwv_min):  
+def print_results_new(tpc_min_70,tpc_min_72, cwv_min, report_date):  
 	today = datetime.datetime.now() #was just datetime.now, but import of datetime in players.py changed that....
 	today = today.strftime("%B %d, %Y")
 
@@ -160,6 +165,7 @@ def print_results_new(tpc_min_70,tpc_min_72, cwv_min):
 	print ()
 	print (course_info)
 	print ('Course Handicap = (H.I. x SR / 113) + (CR - Par)')
+	print (f"GHIN Downloaded: {report_date}")
 	print ()
 	# print('--------------------------------------------------------')
 	for player in player_list:
@@ -170,7 +176,7 @@ def print_results_new(tpc_min_70,tpc_min_72, cwv_min):
 
 def main():
 	#Update the indexes of all players from the excel file
-	get_indexes_from_xl_using_pandas()
+	report_date = get_indexes_from_xl_using_pandas()
 
 	# get_indexes_from_xl_file()
 	day_of_play = input("[M]onday, [W]ednesday, or [F]riday? >")
@@ -203,7 +209,7 @@ def main():
 	cwv_min = cwv_list[0] #lowest CWV handicap
 	# print(f"CWV Min: {cwv_min}")
 
-	print_results_new(tpc_min_70,tpc_min_72, cwv_min)
+	print_results_new(tpc_min_70,tpc_min_72, cwv_min, report_date)
 
 #--------------------START CODE EXECUTION-----------------------------
 
