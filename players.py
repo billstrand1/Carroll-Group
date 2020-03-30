@@ -2,6 +2,9 @@
 # contains the name dictionary and Player class
 # contains the course handicap information
 
+import datetime
+import re
+
 # print ('PLAYERS.PY HAS BEEN IMPORTED')
 #--------------------CONSTANTS-----------------------------
 tpc_hcp_70 = 70
@@ -59,7 +62,7 @@ name_dict = {'Jack Carroll': 'Jack',
 	'Frank Broyles': 'Frank'}
 
 class Player:
-	def __init__ (self, playing, signup_name, ghin_no, email, birthday, cell_phone, ghin_name):
+	def __init__ (self, playing, signup_name, ghin_no, email, birthday, cell_phone, ghin_name): #, birthdate):
 		self.playing = playing
 		self.signup_name = signup_name
 		self.ghin_no = ghin_no
@@ -71,6 +74,15 @@ class Player:
 		self.handicap_tpc_70 = 0
 		self.handicap_tpc_72 = 0
 		self.handicap_cwv_71 = 0
+		self.class_birthday() #NEED TO RESOLVE W/ GHINXL.PY
+
+	def class_birthday(self):
+		bdate = re.split('/', self.birthday)
+		self.day = int(bdate[0])
+		self.month = int(bdate[1])
+		self.year = int(bdate[2])
+		self.birthdate = datetime.date(2020, self.day, self.month)
+		self.age = 2020 - self.year
 
 	def class_tpc_white_70(self): 
 		self.handicap_tpc_70 = (round ((self.h_i * tpc_slope_white_70 / 113) + (tpc_rating_white_70 - tpc_hcp_70))) 
@@ -82,25 +94,26 @@ class Player:
 		self.handicap_cwv_71 = (round ((self.h_i * cwv_slope_white_71 / 113) + (cwv_rating_white_71 - cwv_hcp_71)))  
 
 
+
 Al 		= Player(False, 'Al', '3661029', 'txanv3@verizon.net', '12/24/1940', '(214) 405-6475', 'Al Vela')
-Besse 	= Player(False, 'Besse', '3660283', 'rick@rickbesse.com', '10/07/1943', '(214) 850-7100', 'Rick Besse')
-BillB	= Player(False, 'Bill B.','5910694', 'wbarnard96@aol.com',	'07/15/1953','(817) 800-0659', 'Bill Barnard')
+Besse 	= Player(False, 'Besse', '3660283', 'rick@rickbesse.com', '10/7/1943', '(214) 850-7100', 'Rick Besse')
+BillB	= Player(False, 'Bill B.','5910694', 'wbarnard96@aol.com',	'7/15/1953','(817) 800-0659', 'Bill Barnard')
 BillS	= Player(False, 'Bill S.','0053161', 'billstrand1@yahoo.com', '10/23/1961', '(469) 774-7607', 'Bill  Strand')
-Bob		= Player(False, 'Bob','3660603', 'bheard3321@gmail.com', '06/10/1951', '(214) 995-3050', 'Bob Heard')
+Bob		= Player(False, 'Bob','3660603', 'bheard3321@gmail.com', '6/10/1951', '(214) 995-3050', 'Bob Heard')
 Curt	= Player(False, 'Curt','2379581', 'Cmfitzg@gmail.com', '11/19/1948', '(972) 754-6910', 'Curt Fitzgerald')
-Dan		= Player(False, 'Dan','7701708', 'danstewart01@icloud.com', '09/23/1947', '(214) 215-4046', 'Dan Stewart')
-Doug	= Player(False, 'Doug','3661061', 'dougwilliams9@hotmail.com', '09/06/1946', '(214) 502-3384', 'Doug Williams')
-Frank	= Player(False, 'Frank','2379621', 'frank.broyles@utexas.edu', '05/12/1946', '(214) 207-4336', 'Frank Broyles')
-Hump	= Player(False, 'Hump','3660992', 'rcraighumphrey@msn.com', '08/27/1950', '(214) 686-2666', 'Richard Humphrey')
-Jack	= Player(False, 'Jack','3660366', 'JackLCarroll@Verizon.net', '09/09/1945', '(972) 679-6595', 'Jack Carroll')
+Dan		= Player(False, 'Dan','7701708', 'danstewart01@icloud.com', '9/23/1947', '(214) 215-4046', 'Dan Stewart')
+Doug	= Player(False, 'Doug','3661061', 'dougwilliams9@hotmail.com', '9/6/1946', '(214) 502-3384', 'Doug Williams')
+Frank	= Player(False, 'Frank','2379621', 'frank.broyles@utexas.edu', '5/12/1946', '(214) 207-4336', 'Frank Broyles')
+Hump	= Player(False, 'Hump','3660992', 'rcraighumphrey@msn.com', '8/27/1950', '(214) 686-2666', 'Richard Humphrey')
+Jack	= Player(False, 'Jack','3660366', 'JackLCarroll@Verizon.net', '9/9/1945', '(972) 679-6595', 'Jack Carroll')
 JimS	= Player(False, 'Jim S.','4787165', 'jimsido@gmail.com', '10/15/1946', '(214) 215-0122', 'Jim Sido')
 Jimmy	= Player(False, 'Jimmy W.', '3661053', 'jimwickham@verizon.net', '11/19/1940', '(214) 908-2370', 'Jimmy Wickham')
-Kent	= Player(False, 'Kent','3660486', 'kent.fannon@verizon.net', '07/03/1952', '(214) 850-6980', 'Kent Fannon')
-Larry	= Player(False, 'Larry', '4548474', 'larrytraub5@gmail.com', '07/04/1949',	'(214) 850-8128', 'Larry Traub')
+Kent	= Player(False, 'Kent','3660486', 'kent.fannon@verizon.net', '7/3/1952', '(214) 850-6980', 'Kent Fannon')
+Larry	= Player(False, 'Larry', '4548474', 'larrytraub5@gmail.com', '7/4/1949',	'(214) 850-8128', 'Larry Traub')
 Reid	= Player(False, 'Reid', '3660253', 'reid.baker@sbcglobal.net', '12/14/1948', '(214) 683-1799', 'Reid Baker')
-Rocky	= Player(False, 'Rocky', '3720105', 'duronrocky@gmail.com', '06/10/1932', '(214) 707-0556', 'Rocky Duron')
-Trick	= Player(False, 'Trick', '3660265', 'rbaumgarth@aol.com', '08/17/1947', '(214) 476-7801', 'Rick Baumgarth')
-Will	= Player(False, 'Will', '1815996', 'vanhorn_davis@verizon.net', '09/11/1952', '(561) 351-7724', 'Will Davis')
+Rocky	= Player(False, 'Rocky', '3720105', 'duronrocky@gmail.com', '6/10/1932', '(214) 707-0556', 'Rocky Duron')
+Trick	= Player(False, 'Trick', '3660265', 'rbaumgarth@aol.com', '8/17/1947', '(214) 476-7801', 'Rick Baumgarth')
+Will	= Player(False, 'Will', '1815996', 'vanhorn_davis@verizon.net', '9/11/1952', '(561) 351-7724', 'Will Davis')
  
 player_list = [Al, Besse, BillB, BillS, Bob, Curt,Dan, Doug, Frank, Hump, Jack, JimS, Jimmy, Kent, Larry, Reid, Rocky, Trick, Will]	
 

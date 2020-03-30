@@ -8,13 +8,35 @@ import os
 from simple_smartsheet import Smartsheet
 from simple_smartsheet.models import Sheet, Column, Row, Cell
 
+import pandas as pd
+
 # contains the name dictionary and Player class, course handicap information, player status
 from players import *
 
 # cd documents/github/Carroll-Group
 
 #--------------------Functions -Excel HI's-----------------------------
+def get_indexes_from_xl_using_pandas():
+    df = pd.read_excel('Handicap Index Course Handicap Report.xlsx', sheet_name='Sheet1')
+    print('Sheet Loaded')
+    
+    for ind in range(19):
+        golfer_name = df['Golfer Name'][ind]
+        h_i = (float(df['H.I.'][ind]))
+        print(f"Golfer Name: {golfer_name}, \nHI: {h_i}")
 
+    #Update handicap info in Player Class, set playing to no.
+        for player in player_list:
+#             print(f"Entering player list with GN: {golfer_name}, PN: {player.ghin_name}")
+            if golfer_name == player.ghin_name:
+                print(f"Processing: {golfer_name}")
+                player.h_i = h_i
+                player.class_tpc_white_70()
+                player.class_tpc_white_72()
+                player.class_cwv_white_71()
+                player.playing = False
+
+#NO LONGER USED, USE PANDAS
 #When using the Excel File from Golf Genius
 def get_indexes_from_xl_file():
 	wb = load_workbook(filename = 'Handicap Index Course Handicap Report.xlsx')
@@ -94,7 +116,7 @@ def update_player_status(day_of_play):
 
 #------------------PRINT OUT TABLE OF INDEXES / HANDICAPS / STROKES OFF LOW HANDICAP----------
 def print_results_new(tpc_min_70,tpc_min_72, cwv_min):  
-	today = datetime.now()
+	today = datetime.datetime.now() #was just datetime.now, but import of datetime in players.py changed that....
 	today = today.strftime("%B %d, %Y")
 
 	results_list = []
@@ -110,7 +132,7 @@ def print_results_new(tpc_min_70,tpc_min_72, cwv_min):
 		results_list.sort()
 		# results_list.insert(0,["   ", "   ",  "TPC HCP", "TPC-70", "TPC HCP", "TPC-72"])
 		# results_list.insert(1,["Name", "Index","Par 70", "Strks", "Par 72", "Strks"])
-		headers = ["\nName", "\nIndex", "TPC HCP\nPar 70", "TPC\n Strokes"] #, "TPC HCP\n Par 72", "TPC-72\nStrokes" ]
+		headers = ["\nName", "\nIndex", "TPC HCP\nWhites", "TPC\n Strokes"] #, "TPC HCP\n Par 72", "TPC-72\nStrokes" ]
 		column_print_alignment = list(("right","right","right","right"))# , "right", "right"))
 		course_info = f"TPC 70: CR = {tpc_rating_white_70} | SR = {tpc_slope_white_70} | Par = {tpc_hcp_70}"
 		# course_info = course_info + f"TPC 72: CR = {tpc_rating_white_72} | SR = {tpc_slope_white_72} | Par = {tpc_hcp_72}"
@@ -124,7 +146,7 @@ def print_results_new(tpc_min_70,tpc_min_72, cwv_min):
 		results_list.sort()
 		# results_list.insert(0,["   ", "   ", "CWV HCP", "CWV"])
 		# results_list.insert(1,["Name", "Index","Par 71", "Strokes"])
-		headers = ["\nName", "\nIndex", "CWV HCP\nPar 71", "CWV\n Strokes"] #, "TPC HCP\n Par 72", "TPC-72\nStrokes" ]		
+		headers = ["\nName", "\nIndex", "CWV HCP\nWhites", "CWV\n Strokes"] #, "TPC HCP\n Par 72", "TPC-72\nStrokes" ]		
 		column_print_alignment = list(("right","right","right","right"))
 		course_info = f"CWV: CR = {cwv_rating_white_71} | SR = {cwv_slope_white_71} | Par = {cwv_hcp_71}"
 
@@ -148,7 +170,9 @@ def print_results_new(tpc_min_70,tpc_min_72, cwv_min):
 
 def main():
 	#Update the indexes of all players from the excel file
-	get_indexes_from_xl_file()
+	get_indexes_from_xl_using_pandas()
+
+	# get_indexes_from_xl_file()
 	day_of_play = input("[M]onday, [W]ednesday, or [F]riday? >")
 	update_player_status(day_of_play)
 
