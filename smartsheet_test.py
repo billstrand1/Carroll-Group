@@ -102,7 +102,7 @@ for row in sheet.rows:
 
 # s_monday_list = sorted(monday_list)
 print("Monday:")
-pprint(monday_list
+pprint(monday_list)
 print ('')
 
 # s_wednesday_list = sorted(wednesday_list)

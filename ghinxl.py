@@ -75,44 +75,55 @@ def update_player_status(day_of_play):
 
 	#create list of players for specific date
 	monday_list = []
+	tuesday_list = []
 	wednesday_list = []
+	thursday_list = []
 	friday_list = [] 
 	
 	for row in sheet.rows:
 	    player = row.get_cell("Player").value
+
 	    monday_play = row.get_cell("Mon?").value
 	    if monday_play: monday_list.append(player)
+
+	    tuesday_play = row.get_cell("Tues?").value
+	    if tuesday_play: tuesday_list.append(player)
 
 	    wednesday_play = row.get_cell("Wed?").value
 	    if wednesday_play: wednesday_list.append(player)
 
+	    thursday_play = row.get_cell("Thurs?").value
+	    if thursday_play: thursday_list.append(player)
+
+		# thursday_play = row.get_cell("Thurs?").value  #ERROR HERE!!
+		# if thursday_play: thursday_list.append(player)
+
 	    friday_play = row.get_cell("Fri?").value
-	    if friday_play:
-	    	# print (f"{k}. {player} on Friday")
-	    	# k += 1
-	    	friday_list.append(player)	
+	    if friday_play: friday_list.append(player)	
 
 	if day_of_play == 'M' or day_of_play == 'm':
 		for player in player_list:
 			if player.signup_name in monday_list:
-				# print(f"{i}. {player.signup_name}")
-				# i += 1
+				player.playing = True
+
+	if day_of_play == 'T' or day_of_play == 't':
+		for player in player_list:
+			if player.signup_name in tuesday_list:
 				player.playing = True
 
 	elif day_of_play == 'W' or day_of_play == 'w':
-		i = 1
 		for player in player_list:
 			if player.signup_name in wednesday_list:
-				# print(f"{i:02}. {player.signup_name}")
-				# i += 1
+				player.playing = True
+
+	elif day_of_play == 'H' or day_of_play == 'h':
+		for player in player_list:
+			if player.signup_name in thursday_list:
 				player.playing = True
 
 	elif day_of_play == 'F' or day_of_play == 'f':
-		i = 1
 		for player in player_list:
 			if player.signup_name in friday_list:
-				# print(f"{i}. {player.signup_name}")
-				# i += 1
 				player.playing = True
 	
 	else: print('Bad choice of Day')	
@@ -179,7 +190,7 @@ def main():
 	report_date = get_indexes_from_xl_using_pandas()
 
 	# get_indexes_from_xl_file()
-	day_of_play = input("[M]onday, [W]ednesday, or [F]riday? >")
+	day_of_play = input("[M]on, [T]ues, [W]ed, T[h]urs, or [F]ri? >")
 	update_player_status(day_of_play)
 
 	#accumulate list of handicaps for sorting purposes
@@ -194,7 +205,6 @@ def main():
 			tpc_list_70.append(player.handicap_tpc_70)
 			tpc_list_72.append(player.handicap_tpc_72)
 			cwv_list.append(player.handicap_cwv_71)
-
 
 	#determine lowest handicaps
 	tpc_list_70.sort()
