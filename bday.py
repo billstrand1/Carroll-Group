@@ -1,8 +1,10 @@
 import datetime
 from players import *
-import re
+# import re
 from tabulate import tabulate
 from operator import itemgetter
+
+#Update comment to test VSC and GIT
 
 tday = datetime.date.today()
 birthday_list = []
