@@ -6,6 +6,11 @@ import datetime
 import re
 
 # print ('PLAYERS.PY HAS BEEN IMPORTED')
+#--------------------ROAD TRIP DATA------------------------
+road_hcp = 72 #11.55
+road_slope = 122
+road_rating = 68.7
+
 #--------------------CONSTANTS-----------------------------
 tpc_hcp_70 = 70
 tpc_hcp_72 = 72
@@ -74,6 +79,7 @@ class Player:
 		self.handicap_tpc_70 = 0
 		self.handicap_tpc_72 = 0
 		self.handicap_cwv_71 = 0
+		self.handicap_road = 0
 		self.class_birthday() #NEED TO RESOLVE W/ GHINXL.PY
 
 	def class_birthday(self):
@@ -93,6 +99,8 @@ class Player:
 	def class_cwv_white_71(self):
 		self.handicap_cwv_71 = (round ((self.h_i * cwv_slope_white_71 / 113) + (cwv_rating_white_71 - cwv_hcp_71)))  
 
+	def class_road_tees(self):
+		self.handicap_road = (round ((self.h_i * road_slope / 113) + (road_rating - road_hcp)))  
 
 
 Al 		= Player(False, 'Al', '3661029', 'txanv3@verizon.net', '12/24/1940', '(214) 405-6475', 'Al Vela')

@@ -37,34 +37,35 @@ def get_indexes_from_xl_using_pandas():
                 player.class_tpc_white_70()
                 player.class_tpc_white_72()
                 player.class_cwv_white_71()
+                player.class_road_tees()
                 player.playing = False
 
     return (report_date)
 
 #NO LONGER USED, USE PANDAS
 #When using the Excel File from Golf Genius
-def get_indexes_from_xl_file():
-	wb = load_workbook(filename = 'Handicap Index Course Handicap Report.xlsx')
-	# print(wb)
-	ws = wb['Sheet1']
-	# print(ws)
+# def get_indexes_from_xl_file():
+# 	wb = load_workbook(filename = 'Handicap Index Course Handicap Report.xlsx')
+# 	# print(wb)
+# 	ws = wb['Sheet1']
+# 	# print(ws)
 
-	#Retrieve the player's indexes, compute handicaps
-	for i in range(2, 21):
-		# print(i)
-		golfer_name = (ws.cell(row=i, column=3).value)
-		# print(golfer_name)
-		h_i = (float(ws.cell(row=i, column=4).value))
+# 	#Retrieve the player's indexes, compute handicaps
+# 	for i in range(2, 21):
+# 		# print(i)
+# 		golfer_name = (ws.cell(row=i, column=3).value)
+# 		# print(golfer_name)
+# 		h_i = (float(ws.cell(row=i, column=4).value))
 
 
-		#Update handicap info in Player Class, set playing to no.
-		for player in player_list:
-			if golfer_name == player.ghin_name:
-				player.h_i = h_i
-				player.class_tpc_white_70()
-				player.class_tpc_white_72()
-				player.class_cwv_white_71()
-				player.playing = False
+# 		#Update handicap info in Player Class, set playing to no.
+# 		for player in player_list:
+# 			if golfer_name == player.ghin_name:
+# 				player.h_i = h_i
+# 				player.class_tpc_white_70()
+# 				player.class_tpc_white_72()
+# 				player.class_cwv_white_71()
+# 				player.playing = False
 				# print (f" {golfer_name}, hi: {player.h_i}, tpc 70: {player.handicap_tpc_70}, tpc 72: {player.handicap_tpc_72} cwv: {player.handicap_cwv_71}, status = {player.playing}")
 
 def update_player_status(day_of_play):
@@ -78,7 +79,8 @@ def update_player_status(day_of_play):
 	tuesday_list = []
 	wednesday_list = []
 	thursday_list = []
-	friday_list = [] 
+	friday_list = []
+	road_trip_list = [] 
 	
 	for row in sheet.rows:
 	    player = row.get_cell("Player").value
@@ -95,11 +97,11 @@ def update_player_status(day_of_play):
 	    thursday_play = row.get_cell("Thurs?").value
 	    if thursday_play: thursday_list.append(player)
 
-		# thursday_play = row.get_cell("Thurs?").value  #ERROR HERE!!
-		# if thursday_play: thursday_list.append(player)
-
 	    friday_play = row.get_cell("Fri?").value
-	    if friday_play: friday_list.append(player)	
+	    if friday_play: friday_list.append(player)
+
+	    road_trip_play = row.get_cell("Road Trip?").value
+	    if road_trip_play: road_trip_list.append(player)	
 
 	if day_of_play == 'M' or day_of_play == 'm':
 		for player in player_list:
@@ -125,19 +127,24 @@ def update_player_status(day_of_play):
 		for player in player_list:
 			if player.signup_name in friday_list:
 				player.playing = True
+
+	elif day_of_play == 'R' or day_of_play == 'r':
+		for player in player_list:
+			if player.signup_name in road_trip_list:
+				player.playing = True
 	
 	else: print('Bad choice of Day')	
 
 
 
 #------------------PRINT OUT TABLE OF INDEXES / HANDICAPS / STROKES OFF LOW HANDICAP----------
-def print_results_new(tpc_min_70,tpc_min_72, cwv_min, report_date):  
+def print_results_new(tpc_min_70,tpc_min_72, cwv_min, road_min, report_date):  
 	today = datetime.datetime.now() #was just datetime.now, but import of datetime in players.py changed that....
 	today = today.strftime("%B %d, %Y")
 
 	results_list = []
 
-	choice = input ("[T]PC or [C]WV? > ")
+	choice = input ("[T]PC, [C]WV?, or [R]oad > ")
 
 	if choice == 'T' or choice == 't':
 		for player in player_list:
@@ -166,6 +173,21 @@ def print_results_new(tpc_min_70,tpc_min_72, cwv_min, report_date):
 		column_print_alignment = list(("right","right","right","right"))
 		course_info = f"CWV: CR = {cwv_rating_white_71} | SR = {cwv_slope_white_71} | Par = {cwv_hcp_71}"
 
+	#ROAD TRIP - UPDATE DATA IN 'PLAYERS.PY'
+	elif choice == 'R' or choice == 'r':
+		for player in player_list:
+			if player.playing:
+				results = [player.signup_name, player.h_i, player.handicap_road, player.handicap_road-road_min]
+				results_list.append(results)
+
+		results_list.sort()
+		# results_list.insert(0,["   ", "   ", "CWV HCP", "CWV"])
+		# results_list.insert(1,["Name", "Index","Par 71", "Strokes"])
+		headers = ["\nName", "\nIndex", "TXR HCP\nSilver", "TXR\n Strokes"] #, "TPC HCP\n Par 72", "TPC-72\nStrokes" ]		
+		column_print_alignment = list(("right","right","right","right"))
+		course_info = f"TX Rangers: CR = {road_rating} | SR = {road_slope} | Par = {road_hcp}"
+
+
 	else: print('Bad Choice')
 	
 	#Finish printout:
@@ -190,13 +212,14 @@ def main():
 	report_date = get_indexes_from_xl_using_pandas()
 
 	# get_indexes_from_xl_file()
-	day_of_play = input("[M]on, [T]ues, [W]ed, T[h]urs, or [F]ri? >")
+	day_of_play = input("[M]on, [T]ues, [W]ed, T[h]urs, [F]ri?, or [R]oad?>")
 	update_player_status(day_of_play)
 
 	#accumulate list of handicaps for sorting purposes
 	tpc_list_70 = []
 	tpc_list_72 = [] 
-	cwv_list = [] 
+	cwv_list = []
+	road_list = [] 
 
 	#TODO:  Complete the Smartsheet sign-up list to update player.playing
 
@@ -205,6 +228,7 @@ def main():
 			tpc_list_70.append(player.handicap_tpc_70)
 			tpc_list_72.append(player.handicap_tpc_72)
 			cwv_list.append(player.handicap_cwv_71)
+			road_list.append(player.handicap_road)
 
 	#determine lowest handicaps
 	tpc_list_70.sort()
@@ -219,7 +243,10 @@ def main():
 	cwv_min = cwv_list[0] #lowest CWV handicap
 	# print(f"CWV Min: {cwv_min}")
 
-	print_results_new(tpc_min_70,tpc_min_72, cwv_min, report_date)
+	road_list.sort()
+	road_min = road_list[0] #lowest Road handicap
+
+	print_results_new(tpc_min_70,tpc_min_72, cwv_min, road_min, report_date)
 
 #--------------------START CODE EXECUTION-----------------------------
 
