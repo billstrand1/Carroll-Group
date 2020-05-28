@@ -337,3 +337,5 @@ def main():
 # <section class="golfer_lookup_section"> is copied to text file...
 
 main()
+
+# work on automating the deletions of sign-ups per day with the schedule module
