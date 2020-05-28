@@ -1,0 +1,27 @@
+from def update_player_status(day_of_play):
+
+# NO LONGER USED, USE PANDAS
+# When using the Excel File from Golf Genius
+# def get_indexes_from_xl_file():
+# 	wb = load_workbook(filename = 'Handicap Index Course Handicap Report.xlsx')
+# 	# print(wb)
+# 	ws = wb['Sheet1']
+# 	# print(ws)
+
+# 	#Retrieve the player's indexes, compute handicaps
+# 	for i in range(2, 21):
+# 		# print(i)
+# 		golfer_name = (ws.cell(row=i, column=3).value)
+# 		# print(golfer_name)
+# 		h_i = (float(ws.cell(row=i, column=4).value))
+
+
+# 		#Update handicap info in Player Class, set playing to no.
+# 		for player in player_list:
+# 			if golfer_name == player.ghin_name:
+# 				player.h_i = h_i
+# 				player.class_tpc_white_70()
+# 				player.class_tpc_white_72()
+# 				player.class_cwv_white_71()
+# 				player.playing = False
+# print (f" {golfer_name}, hi: {player.h_i}, tpc 70: {player.handicap_tpc_70}, tpc 72: {player.handicap_tpc_72} cwv: {player.handicap_cwv_71}, status = {player.playing}")
