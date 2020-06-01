@@ -1,6 +1,6 @@
 # Updated for Excel utilization
-
-from tabulate import tabulate  # must use MENLO font in email
+# must use MENLO font in email
+from tabulate import tabulate  
 from datetime import datetime
 
 # from openpyxl import load_workbook
