@@ -1,6 +1,7 @@
 # Updated for Excel utilization
 # must use MENLO font in email
-from tabulate import tabulate  
+# from tabulate import tabulate
+from tabulate import tabulate
 from datetime import datetime
 
 # from openpyxl import load_workbook
@@ -17,6 +18,8 @@ from players import *
 # cd documents/github/Carroll-Group
 
 # --------------------Functions -Excel HI's-----------------------------
+
+
 def get_indexes_from_xl_using_pandas():
     df = pd.read_excel(
         "Handicap Index Course Handicap Report.xlsx", sheet_name="Sheet1"
