@@ -232,7 +232,7 @@ def print_results_new(
     print("")
     print(f"{display_day} ({display_tee_times})")
     print("----------------------------------------")
-    print(" \n Today's date:", today)
+    # print(" \n Today's date:", today)
     print()
     print(
         tabulate(
@@ -268,7 +268,10 @@ def update_tee_times(display_day):
 
     for row in sheet.rows:
         day = row.get_cell("Day").value
-        tee_times = row.get_cell("Course / Tee Times").value
+        date_of_play = row.get_cell("Date").value
+        tee_times_data = row.get_cell("Course / Tee Times").value
+        tee_times = f"{date_of_play} {tee_times_data}"
+
         # print(f"{display_day} / {day} {tee_times}")
         if (day + " Players") == display_day:
             print(f"Returning {tee_times}")
@@ -292,7 +295,7 @@ def main():
     display_tee_times = ""
     display_tee_times = update_tee_times(display_day)
 
-    print(f"Return from UPS display_day {display_day} and {display_tee_times}")
+    # print(f"Return from UPS display_day {display_day} and {display_tee_times}")
     # accumulate list of handicaps for sorting purposes
     tpc_list_70 = []
     tpc_list_72 = []
