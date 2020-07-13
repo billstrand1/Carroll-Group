@@ -24,12 +24,14 @@ def get_indexes_from_xl_using_pandas():
     df = pd.read_excel(
         "Handicap Index Course Handicap Report.xlsx", sheet_name="Sheet1"
     )
-    print("Sheet Loaded")
+    print("Excel Sheet Loaded")
 
-    i = 21
+    # GET REPORT DATE FROM LINE 21
+    # MODIFY WHEN NEW PLAYER ADDED TO SHEET
+    i = 22
     report_date = df["Golfer Name"][i]
 
-    for ind in range(19):
+    for ind in range(20):
         golfer_name = df["Golfer Name"][ind]
         h_i = float(df["H.I."][ind])
         # print(f"Golfer Name: {golfer_name}, \nHI: {h_i}")
@@ -63,6 +65,7 @@ def update_player_status(day_of_play):
     friday_list = []
     road_trip_list = []
 
+    # Inefficient, processing list of players every day
     for row in sheet.rows:
         player = row.get_cell("Player").value
 
@@ -140,6 +143,7 @@ def print_results_new(
     report_date,
     display_day,
     display_tee_times,
+    choice
 ):
     today = (
         datetime.datetime.now()
@@ -147,8 +151,6 @@ def print_results_new(
     today = today.strftime("%B %d, %Y")
 
     results_list = []
-
-    choice = input("[T]PC, [C]WV?, or [R]oad > ")
 
     if choice == "T" or choice == "t":
         for player in player_list:
@@ -230,7 +232,9 @@ def print_results_new(
 
     # Finish printout:
     print("")
+
     print(f"{display_day} ({display_tee_times})")
+    print(f"# Players = {len(results_list)}")
     print("----------------------------------------")
     # print(" \n Today's date:", today)
     print()
@@ -253,6 +257,7 @@ def print_results_new(
         if player.playing:
             print(player.email)
     print("\n\n")
+    return(results_list)
     # END-----------------PRINT OUT TABLE OF INDEXES / HANDICAPS / STROKES OFF LOW HANDICAP----------
 
 
@@ -270,11 +275,11 @@ def update_tee_times(display_day):
         day = row.get_cell("Day").value
         date_of_play = row.get_cell("Date").value
         tee_times_data = row.get_cell("Course / Tee Times").value
-        tee_times = f"{date_of_play} {tee_times_data}"
+        tee_times = f"{date_of_play}, {tee_times_data}"
 
         # print(f"{display_day} / {day} {tee_times}")
         if (day + " Players") == display_day:
-            print(f"Returning {tee_times}")
+            # print(f"Returning {tee_times}")
             return tee_times
 
         # if display_day == (row.get_cell("Day").value)
@@ -283,15 +288,20 @@ def update_tee_times(display_day):
         # break
 
 
-def main():
+def ghinxl_main():
     # Update the indexes of all players from the excel file
     report_date = get_indexes_from_xl_using_pandas()
 
-    # get_indexes_from_xl_file()
+    # Select day of week for play
     display_day = ""
     day_of_play = input("[M]on, [T]ues, [W]ed, T[h]urs, [F]ri?, or [R]oad?>")
     display_day = update_player_status(day_of_play)
 
+    # Select course to play
+    course_choice = input("[T]PC, [C]WV?, or [R]oad > ")
+    # print(course_choice)
+
+    # Get the info from Tee Times Smartsheet
     display_tee_times = ""
     display_tee_times = update_tee_times(display_day)
 
@@ -313,6 +323,7 @@ def main():
 
     # determine lowest handicaps
     tpc_list_70.sort()
+
     tpc_min_70 = tpc_list_70[0]  # lowest TPC70 handicap
     # print(f"TPC 70 Min: {tpc_min_70}")
 
@@ -321,6 +332,7 @@ def main():
     # print(f"TPC 72 Min: {tpc_min_72}")
 
     cwv_list.sort()
+
     cwv_min = cwv_list[0]  # lowest CWV handicap
     # print(f"CWV Min: {cwv_min}")
 
@@ -335,13 +347,15 @@ def main():
         report_date,
         display_day,
         display_tee_times,
+        course_choice
     )
-
+    return(course_choice)
 
 # --------------------START CODE EXECUTION-----------------------------
 
 # <section class="golfer_lookup_section"> is copied to text file...
 
-main()
+
+# main()
 
 # work on automating the deletions of sign-ups per day with the schedule module
