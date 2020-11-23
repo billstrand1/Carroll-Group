@@ -1,8 +1,9 @@
 # Updated for Excel utilization
-# must use MENLO font in email
+# must use MENLO 11 font in email
 # from tabulate import tabulate
 from tabulate import tabulate
 from datetime import datetime
+import random
 
 # from openpyxl import load_workbook
 # from pprint import pprint
@@ -258,7 +259,29 @@ def print_results_new(
             print(player.email)
     print("\n\n")
     return(results_list)
+
+    print(random.shuffle(player_list))
     # END-----------------PRINT OUT TABLE OF INDEXES / HANDICAPS / STROKES OFF LOW HANDICAP----------
+
+
+def get_course_choice(day_of_play):
+    TOKEN = "0b2269ovtwyvi1bmbqm15c2kg9"
+    smartsheet = Smartsheet(TOKEN)
+    # id=8164839852926852	'Tee Times'
+    sheet = smartsheet.sheets.get(id=8164839852926852)
+
+    for row in sheet.rows:
+        day = row.get_cell("Day").value
+        date_of_play = row.get_cell("Date").value
+        tee_times_data = row.get_cell("Course / Tee Times").value
+        print(f"tee_times_data = {tee_times_data}")
+        if 'CWV' in tee_times_data:
+            print('CWV to be played')
+            course_choice = 'C'
+        else:
+            print('TPC to be played')
+            course_choice = 'T'
+    return(course_choice)
 
 
 def update_tee_times(display_day):
@@ -297,8 +320,12 @@ def ghinxl_main():
     day_of_play = input("[M]on, [T]ues, [W]ed, T[h]urs, [F]ri?, or [R]oad?>")
     display_day = update_player_status(day_of_play)
 
-    # Select course to play
+    # Select course to play Manually  NEED TO MAKE AUTOMATIC
     course_choice = input("[T]PC, [C]WV?, or [R]oad > ")
+
+    # TODO:
+    # course_choice = get_course_choice(day_of_play)
+
     # print(course_choice)
 
     # Get the info from Tee Times Smartsheet
