@@ -52,6 +52,13 @@ def get_pairings_info(choice):
             floatfmt=".1f",
         )
     )
+    new_list = sorted_list
+
+    random.shuffle(new_list)
+    print()
+    print('Names in RANDOM order:')
+    for name, hcp in new_list:
+        print(name)
 
 
 # -------------------- main code:
